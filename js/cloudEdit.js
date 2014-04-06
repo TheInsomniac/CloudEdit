@@ -1,72 +1,8 @@
-$(document).ready(function(){
-
-  // Init ACE Editor and set options;
-  var aceTheme;
-  if (localStorage.getItem("theme")) {
-    aceTheme = localStorage.getItem("theme");
-  } else {
-    aceTheme = "ace/theme/chrome";
-  }
-
-  var htmlField = ace.edit("html");
-  htmlField.session.setUseWorker(false);
-  htmlField.setTheme(aceTheme);
-  htmlField.setDisplayIndentGuides(true);
-  htmlField.getSession().setMode("ace/mode/html");
-  htmlField.getSession().setTabSize(2);
-  htmlField.getSession().setUseSoftTabs(true);
-
-  var cssField = ace.edit("css");
-  cssField.setTheme(aceTheme);
-  cssField.setDisplayIndentGuides(true);
-  cssField.getSession().setMode("ace/mode/css");
-  cssField.getSession().setTabSize(2);
-  cssField.getSession().setUseSoftTabs(true);
-
-  var jsField = ace.edit("js");
-  jsField.setTheme(aceTheme);
-  jsField.setDisplayIndentGuides(true);
-  jsField.getSession().setMode("ace/mode/javascript");
-  jsField.getSession().setTabSize(2);
-  jsField.getSession().setUseSoftTabs(true);
-
-  // Retrieve values from sessionStorage if set
-  (function sessionStorageGet() {
-    if (sessionStorage.getItem("html")) {
-      htmlField.setValue(sessionStorage.getItem("html"));
-      htmlField.clearSelection();
-    } else {
-      htmlField.setValue("<!-- Do not place html/head/body tags here.\n" +
-        "Insert the tags as would normally be used in your\n" +
-        "body element. <script> tags ARE allowed, though\n" +
-        "they're best placed at the end of your HTML -->\n");
-      htmlField.clearSelection();
-    }
-    if (sessionStorage.getItem("css")) {
-      cssField.setValue(sessionStorage.getItem("css"));
-      cssField.clearSelection();
-    }
-    if (sessionStorage.getItem("js")) {
-      jsField.setValue(sessionStorage.getItem("js"));
-      jsField.clearSelection();
-    }
-  }());
-
-  // Store data in sessionStorage to prevent data loss on window reload
-  (function sessionStorageSet() {
-    htmlField.getSession().on("change", function(e) {
-      sessionStorage.setItem("html", htmlField.getValue());
-    });
-    cssField.getSession().on("change", function(e) {
-      sessionStorage.setItem("css", cssField.getValue());
-    });
-    jsField.getSession().on("change", function(e) {
-      sessionStorage.setItem("js", jsField.getValue());
-    });
-  }());
+$(document).ready(function() {
 
   // Toggle Text Areas from Displaying
-  $("#htmlToggle").on("click", function(){
+  $("#htmlToggle").on("click", function(el) {
+    el.preventDefault();
     var count = numberOfWindows();
     if (count > 1 || $(this).hasClass("btn-hidden")) {
       $(this).toggleClass("btn-hidden");
@@ -76,7 +12,8 @@ $(document).ready(function(){
       alert("You Must Have at least one Editor open");
     }
   });
-  $("#cssToggle").on("click", function(){
+  $("#cssToggle").on("click", function(el) {
+    el.preventDefault();
     var count = numberOfWindows();
     if (count > 1 || $(this).hasClass("btn-hidden")) {
       $(this).toggleClass("btn-hidden");
@@ -86,7 +23,8 @@ $(document).ready(function(){
       alert("You Must Have at least one Editor open");
     }
   });
-  $("#jsToggle").on("click", function(){
+  $("#jsToggle").on("click", function(el) {
+    el.preventDefault();
     var count = numberOfWindows();
     if (count > 1 || $(this).hasClass("btn-hidden")) {
       $(this).toggleClass("btn-hidden");
@@ -95,6 +33,11 @@ $(document).ready(function(){
     } else {
       alert("You Must Have at least one Editor open");
     }
+  });
+  $("#consoleToggle").on("click", function(el) {
+    el.preventDefault();
+    $(this).toggleClass("btn-hidden");
+    $(".console").toggle();
   });
 
   function resizeWindow() {
@@ -120,7 +63,8 @@ $(document).ready(function(){
 
   // Publish output from HTML, CSS, and JS textareas in the iframe below
   // when "Run" button clicked.
-  $("#run").on("click", function() {
+  $("#run").on("click", function(el) {
+    el.preventDefault();
     var contents = {
       html: htmlField.getValue(),
       css: cssField.getValue(),
@@ -136,6 +80,7 @@ $(document).ready(function(){
       '<style>\n' + contents.css + '\n</style>\n' +
       '</head>\n' +
       '<body>\n' + contents.html + '\n' +
+      '<script src="js/console.min.js"></script>\n' +
       '<script>\n' + contents.js + '\n</script>\n' +
       '</body>\n' +
       '</html>'
@@ -153,6 +98,7 @@ $(document).ready(function(){
     htmlField.clearSelection();
     cssField.setValue("");
     jsField.setValue("");
+    $("#console").empty();
     sessionStorage.clear();
     (document.getElementById("preview").contentWindow.document).write("");
     (document.getElementById("preview").contentWindow.document).close();
@@ -179,7 +125,7 @@ $(document).ready(function(){
       '</body>\n' +
       '</html>';
 
-    var textFileAsBlob = new Blob([textToWrite], {type:"text/plain"});
+    var textFileAsBlob = new Blob([textToWrite], {type: "text/plain"});
     var fileNameToSaveAs = "index.html";
 
     $download.download = fileNameToSaveAs;
@@ -194,115 +140,119 @@ $(document).ready(function(){
   });
 
   // Theme contextMenu
-  // Themes List
-  var menu = [
-    {
-      name: "Light Themes",
-      subMenu: [
-        {
-          name: "Chrome",
-          fun: function () {
+  (function() {
+    $.contextMenu({
+      selector: ".windowGroup",
+      items: {
+        "light": {
+          "name": "Light Themes",
+          items: {
+            "chrome": {
+              "name": "Chrome",
+              "callback": function() {
+                updateTheme("chrome");
+              }
+            },
+            "dreamweaver": {
+              "name": "Dreamweaver",
+              "callback": function() {
+                updateTheme("dreamweaver");
+              }
+            },
+            "dawn": {
+              "name": "Dawn",
+              "callback": function() {
+                updateTheme("dawn");
+              }
+            },
+            "tomorrow": {
+              "name": "Tomorow",
+              "callback": function() {
+                updateTheme("tomorrow");
+              }
+            },
+            "xcode": {
+              "name": "XCode",
+              "callback": function() {
+                updateTheme("xcode");
+              }
+            },
+            "kuroir": {
+              "name": "Kuroir",
+              "callback": function() {
+                updateTheme("kuroir");
+              }
+            },
+            "katzenmilch": {
+              "name": "KatzenMilch",
+              "callback": function() {
+                updateTheme("katzenmilch");
+              }
+            }
+          }
+        },
+        "dark": {
+          "name": "Dark Themes",
+          items: {
+            "ambiance": {
+              "name": "Ambiance",
+              "callback": function() {
+                updateTheme("ambiance");
+              }
+            },
+            "cloudsmidnight": {
+              "name": "Clouds Midight",
+              "callback": function() {
+                updateTheme("clouds_midnight");
+              }
+            },
+            "idlefingers": {
+              "name": "Idle Fingers",
+              "callback": function() {
+                updateTheme("idle_fingers");
+              }
+            },
+            "merbivore": {
+              "name": "Merbivore",
+              "callback": function() {
+                updateTheme("merbivore");
+              }
+            },
+            "merbivoresoft": {
+              "name": "Merbivore Soft",
+              "callback": function() {
+                updateTheme("merbivore_soft");
+              }
+            },
+            "monokai": {
+              "name": "Monokai",
+              "callback": function() {
+                updateTheme("monokai");
+              }
+            },
+            "tomorrownight": {
+              "name": "Tomorrow Night",
+              "callback": function() {
+                updateTheme("tomorrow_night");
+              }
+            },
+            "twilight": {
+              "name": "Twilight",
+              "callback": function() {
+                updateTheme("twilight");
+              }
+            }
+          }
+        },
+        "default": {
+          "name": "Default",
+          "callback": function() {
             updateTheme("chrome");
           }
-        },
-        {
-          name: "Dreamweaver",
-          fun: function () {
-            updateTheme("dreamweaver");
-          }
-        },
-        {
-          name: "Dawn",
-          fun: function () {
-            updateTheme("dawn");
-          }
-        },
-        {
-          name: "Tomorow",
-          fun: function () {
-            updateTheme("tomorrow");
-          }
-        },
-        {
-          name: "XCode",
-          fun: function () {
-            updateTheme("xcode");
-          }
-        },
-        {
-          name: "Kuroir",
-          fun: function () {
-            updateTheme("kuroir");
-          }
-        },
-        {
-          name: "KatzenMilch",
-          fun: function () {
-            updateTheme("katzenmilch");
-          }
         }
-      ]
-    },
-    {
-      name: "Dark Themes",
-      subMenu: [
-        {
-          name: "Ambiance",
-          fun: function () {
-            updateTheme("ambiance");
-          }
-        },
-        {
-          name: "Clouds Midight",
-          fun: function () {
-            updateTheme("clouds_midnight");
-          }
-        },
-        {
-          name: "Idle Fingers",
-          fun: function () {
-            updateTheme("idle_fingers");
-          }
-        },
-        {
-          name: "Merbivore",
-          fun: function () {
-            updateTheme("merbivore");
-          }
-        },
-        {
-          name: "Merbivore Soft",
-          fun: function () {
-            updateTheme("merbivore_soft");
-          }
-        },
-        {
-          name: "Monokai",
-          fun: function () {
-            updateTheme("monokai");
-          }
-        },
-        {
-          name: "Tomorrow Night",
-          fun: function () {
-            updateTheme("tomorrow_night");
-          }
-        },
-        {
-          name: "Twilight",
-          fun: function () {
-            updateTheme("twilight");
-          }
-        }
-      ]
-    },
-    {
-      name:"Default",
-      fun:function() {
-        updateTheme("chrome");
       }
-    }
-  ];
+    });
+  })();
 
   // Apply theme and save to localStorage
   function updateTheme(theme) {
@@ -310,12 +260,14 @@ $(document).ready(function(){
     htmlField.setTheme(theme);
     cssField.setTheme(theme);
     jsField.setTheme(theme);
+    consoleField.setTheme(theme);
     localStorage.setItem("theme", theme);
   }
 
-  // On right-click in one of the editor panes
-  $(".window").contextMenu(menu,{
-    triggerOn:"contextmenu",
-    displayAround:"cursor"
+  // right click on console to clear;
+  $(".console").on("contextmenu", function(el) {
+    el.preventDefault();
+    consoleField.setValue("");
   });
+
 });

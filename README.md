@@ -11,6 +11,10 @@ CloudEdit
 - Uses sessionStorage for the current state in case of the 'accidental' browser refresh.  
 - Uses localStorage to store the currently selected them for your next use.
 
+__Added:__  
+- Rudimentary "view-only" JavaScript console for _console.log_ statements.
+ - Unfortunately I have no way of catching "undefined" variables. They still go to the Browser.  
+
 ![Image1](https://raw.githubusercontent.com/TheInsomniac/CloudEdit/master/img/CloudEdit1.png)  
 
 ![Image2](https://raw.githubusercontent.com/TheInsomniac/CloudEdit/master/img/CloudEdit2.png)
