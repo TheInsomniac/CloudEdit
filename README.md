@@ -11,6 +11,6 @@ CloudEdit
 - Uses sessionStorage for the current state in case of the 'accidental' browser refresh.  
 - Uses localStorage to store the currently selected them for your next use.
 
-![Image1](https://github.com/TheInsomniac/CloudEdit/img/CloudEdit1.png)  
+![Image1](https://raw.githubusercontent.com/TheInsomniac/CloudEdit/master/img/CloudEdit1.png)  
 
-![Image2](https://github.com/TheInsomniac/CloudEdit/img/CloudEdit2.png)
+![Image2](https://raw.githubusercontent.com/TheInsomniac/CloudEdit/master/img/CloudEdit2.png)
