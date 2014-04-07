@@ -1,38 +1,24 @@
 $(document).ready(function() {
+  "use strict";
+  // Globals
+  // ---
+  // For iframe creation:
+  var use_Prefixfree = false;
+  var use_Modernizr = false;
+  var use_Normalize = false;
 
   // Toggle Text Areas from Displaying
   $("#htmlToggle").on("click", function(el) {
     el.preventDefault();
-    var count = numberOfWindows();
-    if (count > 1 || $(this).hasClass("btn-hidden")) {
-      $(this).toggleClass("btn-hidden");
-      $(".window.html").toggle();
-      resizeWindow();
-    } else {
-      alert("You Must Have at least one Editor open");
-    }
+    closeWindow(this, "html");
   });
   $("#cssToggle").on("click", function(el) {
     el.preventDefault();
-    var count = numberOfWindows();
-    if (count > 1 || $(this).hasClass("btn-hidden")) {
-      $(this).toggleClass("btn-hidden");
-      $(".window.css").toggle();
-      resizeWindow();
-    } else {
-      alert("You Must Have at least one Editor open");
-    }
+    closeWindow(this, "css");
   });
   $("#jsToggle").on("click", function(el) {
     el.preventDefault();
-    var count = numberOfWindows();
-    if (count > 1 || $(this).hasClass("btn-hidden")) {
-      $(this).toggleClass("btn-hidden");
-      $(".window.js").toggle();
-      resizeWindow();
-    } else {
-      alert("You Must Have at least one Editor open");
-    }
+    closeWindow(this, "js");
   });
   $("#consoleToggle").on("click", function(el) {
     el.preventDefault();
@@ -44,6 +30,17 @@ $(document).ready(function() {
     $(this).toggleClass("btn-hidden");
     $("iframe").toggleClass("popped");
   });
+
+  function closeWindow(el, name) {
+    var count = numberOfWindows();
+    if (count > 1 || $(el).hasClass("btn-hidden")) {
+      $(el).toggleClass("btn-hidden");
+      $(".window." + name).toggle();
+      resizeWindow();
+    } else {
+      alert("You Must Have at least one Editor open");
+    }
+  }
 
   function resizeWindow() {
     var count = numberOfWindows();
@@ -70,11 +67,17 @@ $(document).ready(function() {
   // when "Run" button clicked.
   $("#run").on("click", function(el) {
     el.preventDefault();
+
     var contents = {
       html: htmlField.getValue(),
       css: cssField.getValue(),
-      js: jsField.getValue()
+      js: jsField.getValue(),
+      scripts: ""
     };
+
+    if (use_Prefixfree) contents["scripts"] += '<script src="js/preview/prefixfree.min.js"></script>\n';
+    if (use_Modernizr) contents["scripts"] += '<script src="js/preview/modernizr.min.js"></script>\n';
+    if (use_Normalize) contents["scripts"] += '<link href="css/preview/normalize.min.css" rel="stylesheet">\n';
 
     (document.getElementById("preview").contentWindow.document).write(
       '<!DOCTYPE html>\n' +
@@ -82,10 +85,11 @@ $(document).ready(function() {
       '<head>\n' +
       '<meta charset="UTF-8">\n' +
       '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>\n' +
+      contents.scripts +
       '<style>\n' + contents.css + '\n</style>\n' +
       '</head>\n' +
       '<body>\n' + contents.html + '\n' +
-      '<script src="js/console.min.js"></script>\n' +
+      '<script src="js/preview/console.min.js"></script>\n' +
       '<script>\n' + contents.js + '\n</script>\n' +
       '</body>\n' +
       '</html>'
@@ -144,120 +148,186 @@ $(document).ready(function() {
     }
   });
 
-  // Theme contextMenu
+  // ContextMenu
+  // This is going to get VERY unruly!
   (function() {
     $.contextMenu({
       selector: ".windowGroup",
       items: {
-        "light": {
-          "name": "Light Themes",
+        "imports": {
+          "name": "Imports",
           items: {
-            "chrome": {
-              "name": "Chrome",
+            "prefixfree": {
+              name: "-prefix-free",
+              type: "checkbox",
+              selected: false
+            },
+            "modernizr": {
+              name: "Modernizr",
+              type: "checkbox",
+              selected: false
+            },
+            "normalize": {
+              name: "CSS Normalize",
+              type: "checkbox",
+              selected: false
+            }
+          }
+        },
+        "themes": {
+          "name": "Themes",
+          items: {
+            "light": {
+              "name": "Light",
+              items: {
+                "chrome": {
+                  "name": "Chrome",
+                  "callback": function() {
+                    updateTheme("chrome");
+                  }
+                },
+                "dreamweaver": {
+                  "name": "Dreamweaver",
+                  "callback": function() {
+                    updateTheme("dreamweaver");
+                  }
+                },
+                "dawn": {
+                  "name": "Dawn",
+                  "callback": function() {
+                    updateTheme("dawn");
+                  }
+                },
+                "tomorrow": {
+                  "name": "Tomorow",
+                  "callback": function() {
+                    updateTheme("tomorrow");
+                  }
+                },
+                "xcode": {
+                  "name": "XCode",
+                  "callback": function() {
+                    updateTheme("xcode");
+                  }
+                },
+                "kuroir": {
+                  "name": "Kuroir",
+                  "callback": function() {
+                    updateTheme("kuroir");
+                  }
+                },
+                "katzenmilch": {
+                  "name": "KatzenMilch",
+                  "callback": function() {
+                    updateTheme("katzenmilch");
+                  }
+                }
+              }
+            },
+            "dark": {
+              "name": "Dark",
+              items: {
+                "ambiance": {
+                  "name": "Ambiance",
+                  "callback": function() {
+                    updateTheme("ambiance");
+                  }
+                },
+                "cloudsmidnight": {
+                  "name": "Clouds Midight",
+                  "callback": function() {
+                    updateTheme("clouds_midnight");
+                  }
+                },
+                "idlefingers": {
+                  "name": "Idle Fingers",
+                  "callback": function() {
+                    updateTheme("idle_fingers");
+                  }
+                },
+                "merbivore": {
+                  "name": "Merbivore",
+                  "callback": function() {
+                    updateTheme("merbivore");
+                  }
+                },
+                "merbivoresoft": {
+                  "name": "Merbivore Soft",
+                  "callback": function() {
+                    updateTheme("merbivore_soft");
+                  }
+                },
+                "monokai": {
+                  "name": "Monokai",
+                  "callback": function() {
+                    updateTheme("monokai");
+                  }
+                },
+                "tomorrownight": {
+                  "name": "Tomorrow Night",
+                  "callback": function() {
+                    updateTheme("tomorrow_night");
+                  }
+                },
+                "twilight": {
+                  "name": "Twilight",
+                  "callback": function() {
+                    updateTheme("twilight");
+                  }
+                }
+              }
+            },
+            "default": {
+              "name": "Default",
               "callback": function() {
                 updateTheme("chrome");
               }
-            },
-            "dreamweaver": {
-              "name": "Dreamweaver",
-              "callback": function() {
-                updateTheme("dreamweaver");
-              }
-            },
-            "dawn": {
-              "name": "Dawn",
-              "callback": function() {
-                updateTheme("dawn");
-              }
-            },
-            "tomorrow": {
-              "name": "Tomorow",
-              "callback": function() {
-                updateTheme("tomorrow");
-              }
-            },
-            "xcode": {
-              "name": "XCode",
-              "callback": function() {
-                updateTheme("xcode");
-              }
-            },
-            "kuroir": {
-              "name": "Kuroir",
-              "callback": function() {
-                updateTheme("kuroir");
-              }
-            },
-            "katzenmilch": {
-              "name": "KatzenMilch",
-              "callback": function() {
-                updateTheme("katzenmilch");
-              }
             }
           }
+        }
+      },
+      events: {
+        show: function(opt) {
+          // this is the trigger element
+          var $this = this;
+          // import states from data store
+          $.contextMenu.setInputValues(opt, $this.data());
+          // this basically fills the input commands from an object
+          // like {name: "foo", yesno: true, radio: "3", …}
         },
-        "dark": {
-          "name": "Dark Themes",
-          items: {
-            "ambiance": {
-              "name": "Ambiance",
-              "callback": function() {
-                updateTheme("ambiance");
-              }
-            },
-            "cloudsmidnight": {
-              "name": "Clouds Midight",
-              "callback": function() {
-                updateTheme("clouds_midnight");
-              }
-            },
-            "idlefingers": {
-              "name": "Idle Fingers",
-              "callback": function() {
-                updateTheme("idle_fingers");
-              }
-            },
-            "merbivore": {
-              "name": "Merbivore",
-              "callback": function() {
-                updateTheme("merbivore");
-              }
-            },
-            "merbivoresoft": {
-              "name": "Merbivore Soft",
-              "callback": function() {
-                updateTheme("merbivore_soft");
-              }
-            },
-            "monokai": {
-              "name": "Monokai",
-              "callback": function() {
-                updateTheme("monokai");
-              }
-            },
-            "tomorrownight": {
-              "name": "Tomorrow Night",
-              "callback": function() {
-                updateTheme("tomorrow_night");
-              }
-            },
-            "twilight": {
-              "name": "Twilight",
-              "callback": function() {
-                updateTheme("twilight");
-              }
-            }
-          }
-        },
-        "default": {
-          "name": "Default",
-          "callback": function() {
-            updateTheme("chrome");
-          }
+        hide: function(opt) {
+          // this is the trigger element
+          var $this = this;
+          // export states to data store
+          $.contextMenu.getInputValues(opt, $this.data());
+          // this basically dumps the input commands' values to an object
+          // like {name: "foo", yesno: true, radio: "3", …}
         }
       }
     });
   })();
+
+  // Get checkbox values from context-menu-input-*
+  // and update "global" variables in order to build
+  // preview window
+  $("input[name*='context-menu-input']").click(function() {
+    var checked = $(this).is(":checked");
+    var item = $(this)[0].name;
+    switch (item) {
+      case "context-menu-input-prefixfree":
+        use_Prefixfree = checked;
+        console.log("Prefixfree is: " + String(use_Prefixfree));
+        break;
+      case "context-menu-input-modernizr":
+        use_Modernizr = checked;
+        console.log("Modernizr is: " + String(use_Modernizr));
+        break;
+      case "context-menu-input-normalize":
+        use_Normalize = checked;
+        console.log("Normalize is: " + String(use_Normalize));
+        break;
+    }
+  });
 
   // Apply theme and save to localStorage
   function updateTheme(theme) {

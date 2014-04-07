@@ -13,8 +13,14 @@ CloudEdit
 
 __Added:__  
 - Rudimentary "view-only" JavaScript console for _console.log_ statements.
- - Unfortunately I have no way of catching "undefined" variables. They still go to the Browser.  
+  - Unfortunately I have no way of catching "undefined" variables. They still go to the Browser.  
 - Preview Modal in case you don't like scrolling or want more of the end-user experience.  
+- Context menu on "right-click" over any editor pane.  
+  - Theme Chooser for editor windows (changes all).  
+  - JS and CSS Imports for the preview window. Currently:  
+   - _-prefix-free.js_  
+   - _modernizr.js_  
+   - _normalize.css_  
 
 ![Image1](https://raw.githubusercontent.com/TheInsomniac/CloudEdit/master/img/CloudEdit1.png)  
 
