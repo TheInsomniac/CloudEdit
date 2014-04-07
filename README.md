@@ -14,6 +14,7 @@ CloudEdit
 __Added:__  
 - Rudimentary "view-only" JavaScript console for _console.log_ statements.
  - Unfortunately I have no way of catching "undefined" variables. They still go to the Browser.  
+- Preview Modal in case you don't like scrolling or want more of the end-user experience.  
 
 ![Image1](https://raw.githubusercontent.com/TheInsomniac/CloudEdit/master/img/CloudEdit1.png)  
 

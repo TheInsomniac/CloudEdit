@@ -39,6 +39,11 @@ $(document).ready(function() {
     $(this).toggleClass("btn-hidden");
     $(".console").toggle();
   });
+  $("#previewToggle").on("click", function(el) {
+    el.preventDefault();
+    $(this).toggleClass("btn-hidden");
+    $("iframe").toggleClass("popped");
+  });
 
   function resizeWindow() {
     var count = numberOfWindows();
@@ -269,5 +274,16 @@ $(document).ready(function() {
     el.preventDefault();
     consoleField.setValue("");
   });
+
+  // Detect a user leaving a page and display a message
+  window.onbeforeunload = function (e) {
+    // If we haven't been passed the event get the window.event
+    e = e || window.event;
+    var message = "Your current session will be lost..";
+    // For IE6-8 and Firefox prior to version 4
+    if (e) e.returnValue = message;
+    // For Chrome, Safari, IE8+ and Opera 12+
+    return message;
+  };
 
 });
