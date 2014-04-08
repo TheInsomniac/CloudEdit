@@ -27,7 +27,7 @@ $(document).ready(function() {
   });
   $("#previewToggle, #iframeClose").on("click", function(el) {
     el.preventDefault();
-    $(this).toggleClass("btn-hidden");
+    $("#previewToggle").toggleClass("btn-hidden");
     $(".preview, html, body, section, #iframeLabel, #iframeClose").toggleClass("modal-open");
   });
 
