@@ -3,7 +3,7 @@ $(document).ready(function() {
   // Globals
   // ---
   // For iframe creation:
-  var use_Prefixfree = false;
+  var use_Autoprefixer = false;
   var use_Modernizr = false;
   var use_Normalize = false;
 
@@ -25,10 +25,10 @@ $(document).ready(function() {
     $(this).toggleClass("btn-hidden");
     $(".console").toggle();
   });
-  $("#previewToggle").on("click", function(el) {
+  $("#previewToggle, #iframeClose").on("click", function(el) {
     el.preventDefault();
     $(this).toggleClass("btn-hidden");
-    $("iframe").toggleClass("popped");
+    $(".preview, html, body, section, #iframeLabel, #iframeClose").toggleClass("modal-open");
   });
 
   function closeWindow(el, name) {
@@ -63,24 +63,30 @@ $(document).ready(function() {
     return count;
   }
 
-  // Publish output from HTML, CSS, and JS textareas in the iframe below
-  // when "Run" button clicked.
-  $("#run").on("click", function(el) {
-    el.preventDefault();
-
+  function buildOutput(preview) {
     var contents = {
       html: htmlField.getValue(),
-      css: cssField.getValue(),
+      css: "",
+      preview: "",
       js: jsField.getValue(),
       scripts: ""
     };
 
-    if (use_Prefixfree) contents["scripts"] += '<script src="js/preview/prefixfree.min.js"></script>\n';
-    if (use_Modernizr) contents["scripts"] += '<script src="js/preview/modernizr.min.js"></script>\n';
-    if (use_Normalize) contents["scripts"] += '<link href="css/preview/normalize.min.css" rel="stylesheet">\n';
+    if (preview && preview === 'preview') {
+      contents["preview"] += '<script src="js/console.min.js"></script>\n'
+    }
 
-    (document.getElementById("preview").contentWindow.document).write(
-      '<!DOCTYPE html>\n' +
+    if (use_Autoprefixer) {
+      var rawCSS = cssField.getValue();
+      contents["css"] = autoprefixer({ cascade: true }).process(rawCSS).css;
+    } else {
+      contents["css"] = cssField.getValue();
+    }
+
+    if (use_Modernizr) contents["scripts"] += '<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>\n';
+    if (use_Normalize) contents["scripts"] += '<link href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet">\n';
+
+    var textToWrite = '<!DOCTYPE html>\n' +
       '<html lang="en">\n' +
       '<head>\n' +
       '<meta charset="UTF-8">\n' +
@@ -89,51 +95,31 @@ $(document).ready(function() {
       '<style>\n' + contents.css + '\n</style>\n' +
       '</head>\n' +
       '<body>\n' + contents.html + '\n' +
-      '<script src="js/preview/console.min.js"></script>\n' +
+      contents.preview +
       '<script>\n' + contents.js + '\n</script>\n' +
       '</body>\n' +
-      '</html>'
-    );
-    (document.getElementById("preview").contentWindow.document).close();
-  });
+      '</html>';
 
-  // Clear editors with "Clear" button
-  $("#clear").on("click", function() {
-    // htmlField.setValue("");
-    htmlField.setValue("<!-- Do not place html/head/body tags here.\n" +
-      "Insert the tags as would normally be used in your\n" +
-      "body element. <script> tags ARE allowed, though\n" +
-      "they're best placed at the end of your HTML -->\n");
-    htmlField.clearSelection();
-    cssField.setValue("");
-    jsField.setValue("");
-    $("#console").empty();
-    sessionStorage.clear();
-    (document.getElementById("preview").contentWindow.document).write("");
-    (document.getElementById("preview").contentWindow.document).close();
+    return textToWrite;
+  }
+
+  // Publish output from HTML, CSS, and JS textareas in the iframe below
+  // when "Run" button clicked.
+  $("#run").on("click", function(el) {
+    el.preventDefault();
+
+    var textToWrite = buildOutput("preview");
+
+    (document.getElementById("iframe").contentWindow.document).write(textToWrite);
+    (document.getElementById("iframe").contentWindow.document).close();
   });
 
   // Download HTML/CSS/JS
   // Source: http://thiscouldbebetter.wordpress.com/2012/12/18/loading-editing-and-saving-a-text-file-in-html5-using-javascrip/
   $("#download").on("click", function() {
-    var $download = $("#download")[0];
-    var contents = {
-      html: htmlField.getValue(),
-      css: cssField.getValue(),
-      js: jsField.getValue()
-    };
-    var textToWrite = '<!DOCTYPE html>\n' +
-      '<html lang="en">\n' +
-      '<head>\n' +
-      '<meta charset="UTF-8">\n' +
-      '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>\n' +
-      '<style>\n' + contents.css + '\n</style>\n' +
-      '</head>\n' +
-      '<body>\n' + contents.html + '\n' +
-      '<script>\n' + contents.js + '\n</script>\n' +
-      '</body>\n' +
-      '</html>';
 
+    var $download = $("#download")[0];
+    var textToWrite = buildOutput();
     var textFileAsBlob = new Blob([textToWrite], {type: "text/plain"});
     var fileNameToSaveAs = "index.html";
 
@@ -148,38 +134,54 @@ $(document).ready(function() {
     }
   });
 
+  // Clear editors with "Clear" button
+  $("#clear").on("click", function() {
+    // htmlField.setValue("");
+    htmlField.setValue("<!-- Do not place html/head/body tags here.\n" +
+      "Insert the tags as would normally be used in your\n" +
+      "body element. <script> tags ARE allowed, though\n" +
+      "they're best placed at the end of your HTML -->\n");
+    htmlField.clearSelection();
+    cssField.setValue("");
+    jsField.setValue("");
+    $("#console").empty();
+    sessionStorage.clear();
+    (document.getElementById("iframe").contentWindow.document).write("");
+    (document.getElementById("iframe").contentWindow.document).close();
+  });
+
   // ContextMenu
   // This is going to get VERY unruly!
   (function() {
     $.contextMenu({
       selector: ".windowGroup",
-      items: {
+      "items": {
         "imports": {
           "name": "Imports",
-          items: {
-            "prefixfree": {
-              name: "-prefix-free",
-              type: "checkbox",
-              selected: false
+          "items": {
+            "autoprefixer": {
+              "name": "Autoprefixer",
+              "type": "checkbox",
+              "selected": false
             },
             "modernizr": {
-              name: "Modernizr",
-              type: "checkbox",
-              selected: false
+              "name": "Modernizr",
+              "type": "checkbox",
+              "selected": false
             },
             "normalize": {
-              name: "CSS Normalize",
-              type: "checkbox",
-              selected: false
+              "name": "CSS Normalize",
+              "type": "checkbox",
+              "selected": false
             }
           }
         },
         "themes": {
           "name": "Themes",
-          items: {
+          "items": {
             "light": {
               "name": "Light",
-              items: {
+              "items": {
                 "chrome": {
                   "name": "Chrome",
                   "callback": function() {
@@ -226,7 +228,7 @@ $(document).ready(function() {
             },
             "dark": {
               "name": "Dark",
-              items: {
+              "items": {
                 "ambiance": {
                   "name": "Ambiance",
                   "callback": function() {
@@ -314,17 +316,14 @@ $(document).ready(function() {
     var checked = $(this).is(":checked");
     var item = $(this)[0].name;
     switch (item) {
-      case "context-menu-input-prefixfree":
-        use_Prefixfree = checked;
-        console.log("Prefixfree is: " + String(use_Prefixfree));
+      case "context-menu-input-autoprefixer":
+        use_Autoprefixer = checked;
         break;
       case "context-menu-input-modernizr":
         use_Modernizr = checked;
-        console.log("Modernizr is: " + String(use_Modernizr));
         break;
       case "context-menu-input-normalize":
         use_Normalize = checked;
-        console.log("Normalize is: " + String(use_Normalize));
         break;
     }
   });

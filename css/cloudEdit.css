@@ -5,12 +5,8 @@
     outline: none;
   }
 
-html, body {
-  height:100%
-}
-
-section {
-  height: auto;
+html, body, section {
+  height:auto;
 }
 
 body {
@@ -30,12 +26,19 @@ h1 {
 section {
   background: #fff;
   width: 100%;
-  min-height: 100%;
   padding: 15px;
   margin: 0;
   -webkit-box-shadow: rgba(0,0,0,.15) 0 15px 50px;
   box-shadow: rgba(0,0,0,.15) 0 15px 50px;
   position: relative;
+}
+
+section:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 
 .btn {
@@ -164,17 +167,22 @@ pre {
   opacity: 0.8;
 }
 
-#html:hover ~ #htmlLabel {
+#html:hover + #htmlLabel {
   opacity: 0;
   z-index: -1;
 }
 
-#css:hover ~ #cssLabel {
+#css:hover + #cssLabel {
   opacity: 0;
   z-index: -1;
 }
 
-#js:hover ~ #jsLabel {
+#js:hover + #jsLabel {
+  opacity: 0;
+  z-index: -1;
+}
+
+#iframe:hover + #iframeLabel {
   opacity: 0;
   z-index: -1;
 }
@@ -198,16 +206,29 @@ pre {
   display: none;
 }
 
-iframe {
+.preview {
   width: 100%;
+  float: left;
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 5px 0 0 0;
   border: 1px solid #cdcdcd;
   border-radius: 3px;
+  -webkit-box-shadow: inset rgba(0,0,0,.05) 0 3px 10px;
+  box-shadow: inset rgba(0,0,0,.05) 0 3px 10px;
   height: 600px;
-  margin: 5px 0 0 0;
-  top: 50%;
+  top: 100%;
 }
 
-iframe.popped {
+#iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  /* top: 100%; */
+}
+
+.preview.modal-open {
   border: 5px solid #c7c7c7;
   border-radius: 3px;
   z-index: 1000;
@@ -223,10 +244,30 @@ iframe.popped {
       transition-timing-function: ease-in-out;
   width: 90%;
   height: 85%;
-  top: 43px;
+  top: 50px;
   left: 5%;
   opacity: 1;
   background: white;
   overflow: auto;
   resize: vertical;
+}
+
+html.modal-open, body.modal-open, section.modal-open {
+    overflow: hidden;
+    height: 100%;
+}
+
+#iframeLabel.modal-open {
+  display: none;
+}
+
+#iframeClose {
+  display: none;
+}
+
+#iframeClose.modal-open {
+  top: -2px;
+  right: -2px;
+  display: inline-block;
+  cursor: pointer;
 }
