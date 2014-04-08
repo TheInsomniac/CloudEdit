@@ -242,14 +242,20 @@ pre {
   -webkit-transition-timing-function: ease-in-out;
     -moz-transition-timing-function: ease-in-out;
       transition-timing-function: ease-in-out;
-  width: 90%;
-  height: 85%;
-  top: 50px;
-  left: 5%;
+  /*
+   * width: 90%;
+   * height: 85%;
+   * top: 50px;
+   * left: 5%;
+   */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
   opacity: 1;
   background: white;
   overflow: auto;
-  resize: vertical;
+  /* resize: vertical; */
 }
 
 html.modal-open, body.modal-open, section.modal-open {
