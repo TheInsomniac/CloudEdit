@@ -2,8 +2,10 @@ $(document).ready(function() {
   "use strict";
   // Globals
   // ---
-  // For iframe creation:
+  // For buildOutput() creation:
   var use_Autoprefixer = false;
+  var use_Less = false;
+  // var use_Sass = false;
   var use_Modernizr = false;
   var use_Normalize = false;
 
@@ -31,6 +33,7 @@ $(document).ready(function() {
     $(".preview, html, body, section, #iframeLabel, #iframeClose").toggleClass("modal-open");
   });
 
+  // On toggling an editor pane resize remaining and toggle button class
   function closeWindow(el, name) {
     var count = numberOfWindows();
     if (count > 1 || $(el).hasClass("btn-hidden")) {
@@ -42,6 +45,7 @@ $(document).ready(function() {
     }
   }
 
+  // Resize panes based upon number currently toggled ON
   function resizeWindow() {
     var count = numberOfWindows();
     var win = $(".window");
@@ -54,6 +58,7 @@ $(document).ready(function() {
     }
   }
 
+  // Return the number of editor panes displayed
   function numberOfWindows() {
     var count = 3;
     var items = $(".window");
@@ -63,44 +68,54 @@ $(document).ready(function() {
     return count;
   }
 
-  function buildOutput(preview) {
+  // Used by preview and download to compile editor panes and "Imports" into valid html
+  function buildOutput(consoleJS) {
     var contents = {
       html: htmlField.getValue(),
-      css: "",
-      preview: "",
-      js: jsField.getValue(),
-      scripts: ""
+      style: cssField.getValue(),
+      js: jsField.getValue()
     };
 
-    if (preview && preview === 'preview') {
-      contents["preview"] += '<script src="js/console.min.js"></script>\n'
+    // String to hold elements to build HTML output
+    var html = '';
+    html += '<html lang="en">\n';
+    html += '<head>\n';
+    html += '<meta charset="UTF-8">\n';
+    if (use_Normalize) {
+      html += '<link href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet">\n'
     }
-
-    if (use_Autoprefixer) {
-      var rawCSS = cssField.getValue();
-      contents["css"] = autoprefixer({ cascade: true }).process(rawCSS).css;
+    if (use_Less) {
+      html += '<style type="text/less">\n';
     } else {
-      contents["css"] = cssField.getValue();
+      html += '<style type="text/css">\n';
     }
+    if (use_Autoprefixer) {
+      html += autoprefixer({ cascade: true }).process(contents.style).css;
+    } else {
+      html += contents.style;
+    }
+    html += '\n</style>\n';
+    html += '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>\n';
+    if (use_Modernizr) {
+      html += '<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>\n';
+    }
+    if (use_Less) {
+      html += '<script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>\n';
+    }
+    html += '</head>\n';
+    html += '<body>\n';
+    html += contents.html;
+    // true if previewing in the preview pane; false if called by download function.
+    if (consoleJS) {
+      html += '<script src="js/console.min.js"></script>\n';
+    }
+    html += '\n<script>\n';
+    html += contents.js;
+    html += '\n</script>\n';
+    html += '</body>\n';
+    html += '</html>';
 
-    if (use_Modernizr) contents["scripts"] += '<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>\n';
-    if (use_Normalize) contents["scripts"] += '<link href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet">\n';
-
-    var textToWrite = '<!DOCTYPE html>\n' +
-      '<html lang="en">\n' +
-      '<head>\n' +
-      '<meta charset="UTF-8">\n' +
-      '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>\n' +
-      contents.scripts +
-      '<style>\n' + contents.css + '\n</style>\n' +
-      '</head>\n' +
-      '<body>\n' + contents.html + '\n' +
-      contents.preview +
-      '<script>\n' + contents.js + '\n</script>\n' +
-      '</body>\n' +
-      '</html>';
-
-    return textToWrite;
+    return html;
   }
 
   // Publish output from HTML, CSS, and JS textareas in the iframe below
@@ -108,7 +123,8 @@ $(document).ready(function() {
   $("#run").on("click", function(el) {
     el.preventDefault();
 
-    var textToWrite = buildOutput("preview");
+    // pass true as we want the pseudo console.js script
+    var textToWrite = buildOutput(true);
 
     (document.getElementById("iframe").contentWindow.document).write(textToWrite);
     (document.getElementById("iframe").contentWindow.document).close();
@@ -119,7 +135,8 @@ $(document).ready(function() {
   $("#download").on("click", function() {
 
     var $download = $("#download")[0];
-    var textToWrite = buildOutput();
+    // pass false as we don't want the pseudo console.js script
+    var textToWrite = buildOutput(false);
     var textFileAsBlob = new Blob([textToWrite], {type: "text/plain"});
     var fileNameToSaveAs = "index.html";
 
@@ -136,7 +153,6 @@ $(document).ready(function() {
 
   // Clear editors with "Clear" button
   $("#clear").on("click", function() {
-    // htmlField.setValue("");
     htmlField.setValue("<!-- Do not place html/head/body tags here.\n" +
       "Insert the tags as would normally be used in your\n" +
       "body element. <script> tags ARE allowed, though\n" +
@@ -159,18 +175,43 @@ $(document).ready(function() {
         "imports": {
           "name": "Imports",
           "items": {
+            "plaincss": {
+              "name":"Plain CSS [Default]",
+              "type": "radio",
+              "radio": "css",
+              "value": "plaincss",
+              "selected": true
+            },
             "autoprefixer": {
               "name": "Autoprefixer",
+              "type": "radio",
+              "radio": "css",
+              "value": "autoprefixer",
+              "selected": false
+            },
+            "less": {
+              "name": "Less CSS",
+              "type": "radio",
+              "radio": "css",
+              "value": "less",
+              "selected": false
+            },
+            /*
+             * "sass": {
+             *   "name": "Sass CSS",
+             *   "type": "radio",
+             *   "radio": "css",
+             *   "value": "sass",
+             *   "selected": false
+             * },
+             */
+            "normalize": {
+              "name": "Normalize CSS",
               "type": "checkbox",
               "selected": false
             },
             "modernizr": {
               "name": "Modernizr",
-              "type": "checkbox",
-              "selected": false
-            },
-            "normalize": {
-              "name": "CSS Normalize",
               "type": "checkbox",
               "selected": false
             }
@@ -312,19 +353,44 @@ $(document).ready(function() {
   // Get checkbox values from context-menu-input-*
   // and update "global" variables in order to build
   // preview window
-  $("input[name*='context-menu-input']").click(function() {
-    var checked = $(this).is(":checked");
-    var item = $(this)[0].name;
-    switch (item) {
-      case "context-menu-input-autoprefixer":
-        use_Autoprefixer = checked;
-        break;
-      case "context-menu-input-modernizr":
-        use_Modernizr = checked;
-        break;
-      case "context-menu-input-normalize":
-        use_Normalize = checked;
-        break;
+  $("input[name*='context-menu-input']").on("click", function() {
+    var val = $(this).val();
+    if (val) {
+      switch (val) {
+        case "plaincss":
+          use_Autoprefixer = false;
+          use_Less = false;
+          // use_Sass = false;
+          break;
+        case "autoprefixer":
+          use_Autoprefixer = true;
+          use_Less = false;
+          // use_Sass = false;
+          break;
+        case "less":
+          use_Less = true;
+          // use_Sass = false;
+          use_Autoprefixer = false;
+          break;
+        /*
+         * case "sass":
+         *   use_Sass = true;
+         *   use_Less = false;
+         *   use_Autoprefixer = false;
+         *   break;
+         */
+      }
+    } else {
+      var checked = $(this).is(":checked");
+      var item = event.target.name; //$(this)[0].name;
+      switch (item) {
+        case "context-menu-input-modernizr":
+          use_Modernizr = checked;
+          break;
+        case "context-menu-input-normalize":
+          use_Normalize = checked;
+          break;
+      }
     }
   });
 
