@@ -2,12 +2,16 @@ $(document).ready(function() {
   "use strict";
   // Globals
   // ---
-  // For buildOutput() creation:
-  var use_Autoprefixer = false;
-  var use_Less = false;
-  // var use_Sass = false;
-  var use_Modernizr = false;
-  var use_Normalize = false;
+  // For buildOutput() creation. Toggle includes in html output.
+  var use = {
+    Autoprefixer: false,
+    Less: false,
+    Sass: false,
+    Modernizr: false,
+    Normalize: false,
+    Bootstrap: false,
+    Foundation: false
+  };
 
   // Toggle Text Areas from Displaying
   $("#htmlToggle").on("click", function(el) {
@@ -70,47 +74,76 @@ $(document).ready(function() {
 
   // Used by preview and download to compile editor panes and "Imports" into valid html
   function buildOutput(consoleJS) {
-    var contents = {
+
+    var content = {
       html: htmlField.getValue(),
       style: cssField.getValue(),
       js: jsField.getValue()
     };
+
+    // If using Sass, load it first via XMLHTTPRequest but do so only once.
+    // We don't want to include it from the get-go as it's 2 Megabytes!!
+    if (use.Sass && !($("#sass").length)) {
+      var xmlHttp = null;
+      xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("GET", "http://rawgithub.com/medialize/sass.js/master/dist/sass.min.js", false);
+      xmlHttp.send(null);
+      var sass = document.createElement("script");
+      sass.id = "sass";
+      sass.type = "text/javascript";
+      sass.text = xmlHttp.responseText;
+      document.getElementsByTagName("head")[0].appendChild(sass);
+    }
 
     // String to hold elements to build HTML output
     var html = '';
     html += '<html lang="en">\n';
     html += '<head>\n';
     html += '<meta charset="UTF-8">\n';
-    if (use_Normalize) {
-      html += '<link href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet">\n'
+    if (use.Normalize) {
+      html += '<link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" rel="stylesheet">\n';
     }
-    if (use_Less) {
+    if (use.Bootstrap) {
+      html += '<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">\n';
+    }
+    if (use.Foundation) {
+      html += '<link href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/css/foundation.min.css" rel="stylesheet">\n';
+    }
+    if (use.Less) {
       html += '<style type="text/less">\n';
     } else {
       html += '<style type="text/css">\n';
     }
-    if (use_Autoprefixer) {
-      html += autoprefixer({ cascade: true }).process(contents.style).css;
+    if (use.Autoprefixer) {
+      html += autoprefixer({ cascade: true }).process(content.style).css;
+    } else if (use.Sass) {
+      html += Sass.compile(content.style);
     } else {
-      html += contents.style;
+      html += content.style;
     }
     html += '\n</style>\n';
     html += '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>\n';
-    if (use_Modernizr) {
-      html += '<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>\n';
+    if (use.Bootstrap) {
+      html += '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>\n';
     }
-    if (use_Less) {
-      html += '<script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>\n';
+    if (use.Foundation) {
+      html += '<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation/foundation.min.js"></script>\n';
+    }
+    if (use.Modernizr) {
+      html += '<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>\n';
+    }
+    if (use.Less) {
+      html += '<script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>\n';
     }
     html += '</head>\n';
     html += '<body>\n';
-    html += contents.html;
+    html += content.html;
     // true if previewing in the preview pane; false if called by download function.
     if (consoleJS) {
       html += '<script src="js/console.min.js"></script>\n';
     }
     html += '\n<script>\n';
-    html += contents.js;
+    html += content.js;
     html += '\n</script>\n';
     html += '</body>\n';
     html += '</html>';
@@ -172,8 +205,8 @@ $(document).ready(function() {
     $.contextMenu({
       selector: ".windowGroup",
       "items": {
-        "imports": {
-          "name": "Imports",
+        "css": {
+          "name": "CSS Options",
           "items": {
             "plaincss": {
               "name":"Plain CSS [Default]",
@@ -196,15 +229,13 @@ $(document).ready(function() {
               "value": "less",
               "selected": false
             },
-            /*
-             * "sass": {
-             *   "name": "Sass CSS",
-             *   "type": "radio",
-             *   "radio": "css",
-             *   "value": "sass",
-             *   "selected": false
-             * },
-             */
+            "sass": {
+              "name": "Sass CSS [Experimental]",
+              "type": "radio",
+              "radio": "css",
+              "value": "sass",
+              "selected": false
+            },
             "normalize": {
               "name": "Normalize CSS",
               "type": "checkbox",
@@ -217,8 +248,27 @@ $(document).ready(function() {
             }
           }
         },
+        "framework": {
+          "name": "Frameworks",
+          "items": {
+            "bootstrap": {
+              "name":"Bootstrap",
+              "type": "radio",
+              "radio": "framework",
+              "value": "bootstrap",
+              "selected": false
+            },
+            "foundation": {
+              "name": "Foundation",
+              "type": "radio",
+              "radio": "framework",
+              "value": "foundation",
+              "selected": false
+            }
+          }
+        },
         "themes": {
-          "name": "Themes",
+          "name": "Editor Themes",
           "items": {
             "light": {
               "name": "Light",
@@ -358,37 +408,46 @@ $(document).ready(function() {
     if (val) {
       switch (val) {
         case "plaincss":
-          use_Autoprefixer = false;
-          use_Less = false;
-          // use_Sass = false;
+          cssField.getSession().setMode("ace/mode/css");
+          use.Autoprefixer = false;
+          use.Less = false;
+          use.Sass = false;
           break;
         case "autoprefixer":
-          use_Autoprefixer = true;
-          use_Less = false;
-          // use_Sass = false;
+          cssField.getSession().setMode("ace/mode/css");
+          use.Autoprefixer = true;
+          use.Less = false;
+          use.Sass = false;
           break;
         case "less":
-          use_Less = true;
-          // use_Sass = false;
-          use_Autoprefixer = false;
+          cssField.getSession().setMode("ace/mode/less");
+          use.Less = true;
+          use.Sass = false;
+          use.Autoprefixer = false;
           break;
-        /*
-         * case "sass":
-         *   use_Sass = true;
-         *   use_Less = false;
-         *   use_Autoprefixer = false;
-         *   break;
-         */
+        case "sass":
+          cssField.getSession().setMode("ace/mode/sass");
+          use.Sass = true;
+          use.Less = false;
+          use.Autoprefixer = false;
+          break;
+        case "bootstrap":
+          use.Bootstrap = true;
+          use.Foundation = false;
+          break;
+        case "foundation":
+          use.Foundation = true;
+          use.Bootstrap = false;
       }
     } else {
       var checked = $(this).is(":checked");
       var item = event.target.name; //$(this)[0].name;
       switch (item) {
         case "context-menu-input-modernizr":
-          use_Modernizr = checked;
+          use.Modernizr = checked;
           break;
         case "context-menu-input-normalize":
-          use_Normalize = checked;
+          use.Normalize = checked;
           break;
       }
     }
