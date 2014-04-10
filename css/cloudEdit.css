@@ -1,7 +1,7 @@
 *, *:before, *:after {
     -webkit-box-sizing: border-box;
-    box-sizing: border-box;
     -moz-box-sizing: border-box;
+    box-sizing: border-box;
     outline: none;
   }
 
@@ -13,10 +13,13 @@ body {
   background: #eaeaea;
   padding: 0;
   margin: 0;
+  font-family: Avenir,Helvetica Neue,Arial,sans-serif;
+  font-size: 16px;
+/*  -webkit-font-smoothing: antialiased;*/
+/* -webkit-font-smoothing: subpixel-antialiased; */
 }
 
 h1 {
-  font-family: 'Source Sans Pro', sans-serif;
   text-align: center;
   color: #777;
   margin: 0;
@@ -42,7 +45,7 @@ section:after {
 }
 
 .btn {
-  width: 81px;
+  width: 86px;
   height: 29px;
   position: absolute;
   top: 15px;
@@ -51,9 +54,8 @@ section:after {
   color: #777;
   border: 1px solid #cdcdcd;
   border-radius: 3px;
-  font-family: 'Source Sans Pro', sans-serif;
-  font-size: 10pt;
-  text-shadow: rgba(255,255,2550.5) 0 1px 2px;
+  font-size: .75em;
+  text-shadow: rgba(255,255,255,0.5) 0 1px 2px;
   text-decoration: none;
   outline: none;
   text-align: center;
@@ -75,15 +77,15 @@ section:after {
 }
 
 #cssToggle {
-  left: 100px;
+  left: 105px;
 }
 
 #jsToggle {
-  left: 185px;
+  left: 195px;
 }
 
 #consoleToggle {
-  left: 270px;
+  left: 285px;
   width: 105px;
 }
 
@@ -104,13 +106,13 @@ section:after {
 }
 
 #clear {
-  right: 155px;
+  right: 160px;
   width: 50px;
 }
 
 #previewToggle {
   width: 70px;
-  right: 210px;
+  right: 215px;
 }
 
 .window {
@@ -157,7 +159,7 @@ pre {
   top: 2px;
   right: 2px;
   text-align: center;
-  font-size: 12px;
+  font-size: .75em;
   color: #777;
   border-radius: 3px;
   z-index: 30;
