@@ -408,9 +408,10 @@ $(document).ready(function() {
   })();
 
   // Get checkbox values from context-menu-input-*
-  // and update "global" variables in order to build
+  // and update "global" variable "use" in order to build
   // preview window
-  $("input[name*='context-menu-input']").on("click", function() {
+  // $("input[name*='context-menu-input']").on("click", function() {
+  $(".context-menu-list").on("click", "input[name*='context-menu-input']", function() {
     var val = $(this).val();
     if (val) {
       switch (val) {
