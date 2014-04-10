@@ -251,8 +251,15 @@ $(document).ready(function() {
         "framework": {
           "name": "Frameworks",
           "items": {
+            "none": {
+              "name": "None [Default]",
+              "type": "radio",
+              "radio": "framework",
+              "value": "none",
+              "selected": true
+            },
             "bootstrap": {
-              "name":"Bootstrap",
+              "name": "Bootstrap",
               "type": "radio",
               "radio": "framework",
               "value": "bootstrap",
@@ -274,7 +281,7 @@ $(document).ready(function() {
               "name": "Light",
               "items": {
                 "chrome": {
-                  "name": "Chrome",
+                  "name": "Chrome [Default]",
                   "callback": function() {
                     updateTheme("chrome");
                   }
@@ -407,30 +414,39 @@ $(document).ready(function() {
     var val = $(this).val();
     if (val) {
       switch (val) {
+        // CSS Pre-Processor
         case "plaincss":
+          $('#cssLabel').text("CSS");
           cssField.getSession().setMode("ace/mode/css");
           use.Autoprefixer = false;
           use.Less = false;
           use.Sass = false;
           break;
         case "autoprefixer":
+          $('#cssLabel').text("CSS");
           cssField.getSession().setMode("ace/mode/css");
           use.Autoprefixer = true;
           use.Less = false;
           use.Sass = false;
           break;
         case "less":
+          $('#cssLabel').text("LESS");
           cssField.getSession().setMode("ace/mode/less");
           use.Less = true;
           use.Sass = false;
           use.Autoprefixer = false;
           break;
         case "sass":
+          $('#cssLabel').text("SASS");
           cssField.getSession().setMode("ace/mode/sass");
           use.Sass = true;
           use.Less = false;
           use.Autoprefixer = false;
           break;
+        // CSS Frameworks
+        case "none":
+          use.Bootstrap = false;
+          use.Foundation = false;
         case "bootstrap":
           use.Bootstrap = true;
           use.Foundation = false;
