@@ -89,7 +89,7 @@ section:after {
   width: 105px;
 }
 
-#run {
+/*#run {
   right: 15px;
   width: 50px;
 }
@@ -99,20 +99,23 @@ section:after {
   position: relative;
   top: 1px;
   color: #BDB3B3;
-}
+}*/
 
 #download {
-  right: 70px;
+/*  right: 70px;*/
+  right: 15px;
 }
 
 #clear {
-  right: 160px;
+/*  right: 160px;*/
+  right:105px;
   width: 50px;
 }
 
 #previewToggle {
+/*  right: 215px;*/
+right: 159px;
   width: 70px;
-  right: 215px;
 }
 
 .window {
