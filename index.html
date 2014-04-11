@@ -11,14 +11,14 @@
   <section>
     <h1>CloudEdit: HTML Live Editor</h1>
     <div class="btnGroup">
-      <a class="btn" id="previewToggle" href="#!" title="Enlarge Preview">Preview</a>
-      <a class="btn" id="clear" href="#!" title="Click to clear all">Clear</a>
-      <a class="btn" id="download" href="#!" title="Download">Download</a>
-<!--       <a class="btn" id="run" href="#!" title="Run">Run</a> -->
-      <a class="btn" id="htmlToggle" href="#!" title="Toggle HTML">Toggle HTML</a>
-      <a class="btn" id="cssToggle" href="#!" title="Toggle CSS">Toggle CSS</a>
-      <a class="btn" id="jsToggle" href="#!" title="Toggle JS">Toggle JS</a>
-      <a class="btn btn-hidden" id="consoleToggle" href="#!" title="Toggle Console">Toggle Console</a>
+      <button class="btn" id="previewToggle" title="Enlarge Preview">Preview</button>
+      <button class="btn" id="clear" title="Click to clear all">Clear</button>
+      <button class="btn" id="download" title="Download">Download</button>
+      <button class="btn" id="run" title="Run">Run</button>
+      <button class="btn togglePane" id="htmlToggle" data-editor="html" title="Toggle HTML">Toggle HTML</button>
+      <button class="btn togglePane" id="cssToggle" data-editor="css" title="Toggle CSS">Toggle CSS</button>
+      <button class="btn togglePane" id="jsToggle" data-editor="js" title="Toggle JS">Toggle JS</button>
+      <button class="btn btn-hidden" id="consoleToggle" title="Toggle Console">Toggle Console</button>
     </div>
     <div class="windowGroup">
       <div class="window html">
@@ -41,7 +41,7 @@
     <div class="preview">
       <iframe id="iframe"></iframe>
       <span class="windowLabel" id="iframeLabel">Preview</span>
-      <span class="windowLabel" id="iframeClose">X</span>
+      <span id="iframeClose">x</span>
     </div>
   </section>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

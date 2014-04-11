@@ -49,7 +49,7 @@ section:after {
   height: 29px;
   position: absolute;
   top: 15px;
-  padding: 5px;
+  padding: 0;
   background: #eaeaea;
   color: #777;
   border: 1px solid #cdcdcd;
@@ -89,7 +89,7 @@ section:after {
   width: 105px;
 }
 
-/*#run {
+#run {
   right: 15px;
   width: 50px;
 }
@@ -99,22 +99,22 @@ section:after {
   position: relative;
   top: 1px;
   color: #BDB3B3;
-}*/
+}
 
 #download {
-/*  right: 70px;*/
-  right: 15px;
+  right: 70px;
+/*  right: 15px;*/
 }
 
 #clear {
-/*  right: 160px;*/
-  right:105px;
+  right: 160px;
+/*  right:105px;*/
   width: 50px;
 }
 
 #previewToggle {
-/*  right: 215px;*/
-right: 159px;
+  right: 215px;
+/*  right: 159px;*/
   width: 70px;
 }
 
@@ -211,6 +211,13 @@ pre {
   display: none;
 }
 
+#iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  /* top: 100%; */
+}
+
 .preview {
   width: 100%;
   float: left;
@@ -224,20 +231,6 @@ pre {
   box-shadow: inset rgba(0,0,0,.05) 0 3px 10px;
   height: 600px;
   top: 100%;
-}
-
-#iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  /* top: 100%; */
-}
-
-.preview.modal-open {
-  border: 5px solid #c7c7c7;
-  border-radius: 3px;
-  z-index: 1000;
-  position: fixed;
   -webkit-transition-property: top;
     -moz-transition-property: top;
       transition-property: top;
@@ -247,20 +240,20 @@ pre {
   -webkit-transition-timing-function: ease-in-out;
     -moz-transition-timing-function: ease-in-out;
       transition-timing-function: ease-in-out;
-  /*
-   * width: 90%;
-   * height: 85%;
-   * top: 50px;
-   * left: 5%;
-   */
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+}
+
+.preview.modal-open {
+  border: 1px solid #c7c7c7;
+  border-radius: 3px;
+  z-index: 1000;
+  position: fixed;
+  width: 98%;
+  height: 97%;
+  top: 1%;
+  left: 1%;
   opacity: 1;
   background: white;
-  overflow: auto;
-  /* resize: vertical; */
+  overflow: hidden;
 }
 
 html.modal-open, body.modal-open, section.modal-open {
@@ -274,11 +267,33 @@ html.modal-open, body.modal-open, section.modal-open {
 
 #iframeClose {
   display: none;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 25px;
+  width: 25px;
+  height: 25px;
+  line-height: 20px;
+  top: 5px;
+  right: 5px;
+  border: 1px solid #cdcdcd;
+  color: #cdcdcd;
+  opacity: 0.8;
+  text-align: center;
 }
 
 #iframeClose.modal-open {
-  top: -2px;
-  right: -2px;
   display: inline-block;
-  cursor: pointer;
+}
+
+#iframeClose.modal-open:hover {
+  -webkit-transform: scale(1.4);
+    -moz-transform: scale(1.4);
+      transform: scale(1.4);
+  -webkit-transition-property: all;
+    -moz-transition-property: all;
+      transition-property: all;
+  -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+      transition-duration: 0.2s;
+  opacity: 1;
 }

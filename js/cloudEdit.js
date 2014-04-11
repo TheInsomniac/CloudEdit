@@ -108,39 +108,26 @@
   // END ACE Editor
 
   // Toggle Text Areas from Displaying
-  $("#htmlToggle").on("click", function(el) {
-    el.preventDefault();
-    closeWindow(this, "html");
+  $(".togglePane").on("click", function() {
+    closeWindow(this);
   });
-  $("#cssToggle").on("click", function(el) {
-    el.preventDefault();
-    closeWindow(this, "css");
-  });
-  $("#jsToggle").on("click", function(el) {
-    el.preventDefault();
-    closeWindow(this, "js");
-  });
-  $("#consoleToggle").on("click", function(el) {
-    el.preventDefault();
+  $("#consoleToggle").on("click", function() {
     $(this).toggleClass("btn-hidden");
     $(".console").toggle();
   });
-  $("#previewToggle, #iframeClose").on("click", function(el) {
-    el.preventDefault();
+  $("#previewToggle, #iframeClose").on("click", function() {
     $("#previewToggle").toggleClass("btn-hidden");
     $(".preview, html, body, section, #iframeLabel, #iframeClose").toggleClass("modal-open");
   });
 
-  // On toggling an editor pane resize remaining and toggle button class
-  function closeWindow(el, name) {
-    var count = numberOfWindows();
-    if (count > 1 || $(el).hasClass("btn-hidden")) {
-      $(el).toggleClass("btn-hidden");
-      $(".window." + name).toggle();
-      resizeWindow();
-    } else {
-      alert("You Must Have at least one Editor open");
-    }
+  // Return the number of editor panes displayed
+  function numberOfWindows() {
+    var count = 3;
+    var items = $(".window");
+    items.each(function(el) {
+      if ($(items[el]).css("display") === "none") count -= 1;
+    });
+    return count;
   }
 
   // Resize panes based upon number currently toggled ON
@@ -156,14 +143,17 @@
     }
   }
 
-  // Return the number of editor panes displayed
-  function numberOfWindows() {
-    var count = 3;
-    var items = $(".window");
-    items.each(function(el) {
-      if ($(items[el]).css("display") === "none") count -= 1;
-    });
-    return count;
+  // On toggling an editor pane resize remaining and toggle button class
+  function closeWindow(el) {
+    var name = el.dataset.editor;
+    var count = numberOfWindows();
+    if (count > 1 || $(el).hasClass("btn-hidden")) {
+      $(el).toggleClass("btn-hidden");
+      $(".window." + name).toggle();
+      resizeWindow();
+    } else {
+      alert("You Must Have at least one Editor open");
+    }
   }
 
   // Used by preview and download to compile editor panes and "Imports" into valid html
@@ -248,8 +238,12 @@
   }
 
   // Publish output from HTML, CSS, and JS textareas in the iframe below
-  //$("#run").on("click", function(el) {
-  //el.preventDefault();
+  // after given keyup delay. If no delay provided, default to 500ms
+
+  $("#run").on("click", function() {
+    preview(0);
+  });
+
   function preview(delay) {
     delay = delay || 500;
     var timer = null;
@@ -296,7 +290,7 @@
     htmlField.clearSelection();
     cssField.setValue("");
     jsField.setValue("");
-    $("#console").empty();
+    consoleField.setValue("");
     sessionStorage.clear();
     (document.getElementById("iframe").contentWindow.document).write("");
     (document.getElementById("iframe").contentWindow.document).close();
