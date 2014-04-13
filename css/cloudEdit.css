@@ -93,7 +93,6 @@ section {
   padding: 15px;
   -webkit-box-shadow: rgba(0,0,0,.15) 0 15px 50px;
   box-shadow: rgba(0,0,0,.15) 0 15px 50px;
-/*  position: relative;*/
 }
 
 section:after {
@@ -106,16 +105,11 @@ section:after {
 
 .btn {
   padding: 5px;
-/*  width: 86px;*/
-/*  line-height: 29px;*/
-/*  position: absolute;*/
-/*  top: 15px;*/
   background: #eaeaea;
   color: #777;
   border: 1px solid #cdcdcd;
   border-radius: 3px;
-/*  font-family: "Clear Sans";
-  font-weight: 200;*/
+  font-family: "Clear Sans";
   font-size: .75em;
   text-shadow: rgba(255,255,255,0.5) 0 1px 2px;
   text-decoration: none;
