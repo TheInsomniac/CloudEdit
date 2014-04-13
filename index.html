@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
@@ -7,48 +8,66 @@
   <link href="css/cloudEdit.css" rel="stylesheet">
   <link href="css/contextMenu.css" rel="stylesheet">
 </head>
+
 <body>
   <section>
-    <h1>CloudEdit: HTML Live Editor</h1>
-    <div class="btnGroup">
-      <button class="btn" id="previewToggle" title="Enlarge Preview">Preview</button>
-      <button class="btn" id="clear" title="Click to clear all">Clear</button>
-      <button class="btn" id="download" title="Download">Download</button>
-      <button class="btn" id="run" title="Run">Run</button>
-      <button class="btn togglePane" id="htmlToggle" data-editor="html" title="Toggle HTML">Toggle HTML</button>
-      <button class="btn togglePane" id="cssToggle" data-editor="css" title="Toggle CSS">Toggle CSS</button>
-      <button class="btn togglePane" id="jsToggle" data-editor="js" title="Toggle JS">Toggle JS</button>
-      <button class="btn btn-hidden" id="consoleToggle" title="Toggle Console">Toggle Console</button>
-    </div>
-    <div class="windowGroup">
-      <div class="window html">
-        <pre id="html"></pre>
-        <span class="windowLabel" id="htmlLabel">HTML</span>
-      </div>
-      <div class="window css">
-        <pre id="css"></pre>
-        <span class="windowLabel" id="cssLabel">CSS</span>
-      </div>
-      <div class="window js">
-        <pre id="js"></pre>
-        <span class="windowLabel" id="jsLabel">JavaScript/jQuery 1.x</span>
+    <div class="row btnGroup">
+      <div class="column-33 toggleGroup">
+        <button class="btn togglePane" id="htmlToggle" data-editor="html" title="Toggle HTML">Toggle HTML</button>
+        <button class="btn togglePane" id="cssToggle" data-editor="css" title="Toggle CSS">Toggle CSS</button>
+        <button class="btn togglePane" id="jsToggle" data-editor="js" title="Toggle JS">Toggle JS</button>
+        <button class="btn btn-active" id="consoleToggle" title="Toggle Console">Toggle Console</button>
+      </div><!--
+      --><div class="column-33">
+        <h1>CloudEdit: HTML Live Editor</h1>
+      </div><!--
+      --><div class="column-33 btnGroup last">
+        <button class="btn btn-active" id="liveEdit" title="Toggle Live Edit">Toggle LiveEdit</button>
+        <button class="btn" id="previewToggle" title="Enlarge Preview">Preview</button>
+        <button class="btn" id="clear" title="Click to clear all">Clear</button>
+        <button class="btn" id="download" title="Download">Download</button>
+        <button class="btn" id="run" title="Run">Run</button>
       </div>
     </div>
-    <div class="console">
+    <div class="row windowGroup">
+      <div class="column-33">
+        <div class="window html">
+          <pre id="html"></pre>
+          <span class="windowLabel" id="htmlLabel">HTML</span>
+        </div>
+      </div><!--
+      --><div class="column-33">
+        <div class="window css">
+          <pre id="css"></pre>
+          <span class="windowLabel" id="cssLabel">CSS</span>
+        </div>
+      </div><!--
+      --><div class="column-33">
+        <div class="window js">
+          <pre id="js"></pre>
+          <span class="windowLabel" id="jsLabel">JavaScript/jQuery 1.x</span>
+        </div>
+      </div>
+    </div>
+    <div class="row console">
       <pre id="console"></pre>
       <span class="windowLabel" id="consoleLabel">Console [right-click to clear]</span>
     </div>
-    <div class="preview">
-      <iframe id="iframe"></iframe>
+    <div class="row preview">
+      <iframe id="iframe" name="CloudEdit"
+        sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-forms"
+        allowtransparency="true">
+      </iframe>
       <span class="windowLabel" id="iframeLabel">Preview</span>
       <span id="iframeClose">x</span>
     </div>
   </section>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-  <script src="js/autoprefixer.js" type="text/javascript" charset="utf-8"></script>
+  <!--script src="js/autoprefixer.js" type="text/javascript" charset="utf-8"></script-->
   <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jquery.ui.position.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/contextMenu.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/cloudEdit.min.js" type="text/javascript" charset="utf-8"></script>
 </body>
+
 </html>

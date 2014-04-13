@@ -1,4 +1,5 @@
-(function() {
+/*global $:false, ace:false, htmlField:false, cssField:false, jsField:false, consoleField:false*/
+(function cloudEdit() {
   "use strict";
   // Globals
   // ---
@@ -10,7 +11,8 @@
     Modernizr: false,
     Normalize: false,
     Bootstrap: false,
-    Foundation: false
+    Foundation: false,
+    liveEdit: false
   };
 
   // ---
@@ -28,59 +30,58 @@
 
     // HTML Editor
     window.htmlField = ace.edit("html");
-    htmlField.session.setUseWorker(false);
-    htmlField.setTheme(aceTheme);
-    htmlField.setDisplayIndentGuides(true);
-    htmlField.getSession().setMode("ace/mode/html");
-    htmlField.getSession().setTabSize(2);
-    htmlField.getSession().setUseSoftTabs(true);
+    htmlField.setOptions({
+      useWorker: false,
+      theme: aceTheme,
+      displayIndentGuides: true,
+      mode: "ace/mode/html",
+      tabSize: 2,
+      useSoftTabs: true,
+      showPrintMargin: false
+    });
 
     // CSS Editor
     window.cssField = ace.edit("css");
-    cssField.setTheme(aceTheme);
-    cssField.setDisplayIndentGuides(true);
-    cssField.getSession().setMode("ace/mode/css");
-    cssField.getSession().setTabSize(2);
-    cssField.getSession().setUseSoftTabs(true);
+    cssField.setOptions({
+      theme: aceTheme,
+      displayIndentGuides: true,
+      mode: "ace/mode/css",
+      tabSize: 2,
+      useSoftTabs: true,
+      showPrintMargin: false
+    });
 
     // JS Editor
     window.jsField = ace.edit("js");
-    jsField.setTheme(aceTheme);
-    jsField.setDisplayIndentGuides(true);
-    jsField.getSession().setMode("ace/mode/javascript");
-    jsField.getSession().setTabSize(2);
-    jsField.getSession().setUseSoftTabs(true);
+    jsField.setOptions({
+      theme: aceTheme,
+      displayIndentGuides: true,
+      mode: "ace/mode/javascript",
+      tabSize: 2,
+      useSoftTabs: true,
+      showPrintMargin: false
+    });
 
     // Console
     window.consoleField = ace.edit("console");
-    consoleField.session.setUseWorker(false);
-    consoleField.setTheme(aceTheme);
-    consoleField.getSession().setMode("ace/mode/javascript");
-    consoleField.setReadOnly(true);
-    consoleField.setHighlightActiveLine(false);
-    consoleField.setHighlightGutterLine(false);
+    // Hide input cursor
     consoleField.renderer.$cursorLayer.element.style.opacity=0;
+    // Disable all pointer events
     consoleField.container.style.pointerEvents="none";
-    consoleField.setShowPrintMargin(false);
+    // Clear highlight after appending output
     consoleField.getSession().selection.on("changeSelection", function() {
       consoleField.clearSelection();
     });
-
-    // Store data in sessionStorage to prevent data loss on window reload
-    // and run preview function to emit changes to iframe
-    (function sessionStorageSet() {
-      htmlField.getSession().on("change", function(e) {
-        sessionStorage.setItem("html", htmlField.getValue());
-        preview();
-      });
-      cssField.getSession().on("change", function(e) {
-        sessionStorage.setItem("css", cssField.getValue());
-        preview(2000);
-      });
-      jsField.getSession().on("change", function(e) {
-        sessionStorage.setItem("js", jsField.getValue());
-      });
-    })();
+    consoleField.setOptions({
+      useWorker: false,
+      readOnly: true,
+      theme: aceTheme,
+      displayIndentGuides: true,
+      mode: "ace/mode/javascript",
+      highlightActiveLine: false,
+      highlightGutterLine: false,
+      showPrintMargin: false
+    });
 
     // Retrieve values from sessionStorage if set
     (function sessionStorageGet() {
@@ -93,6 +94,9 @@
           "body element. <script> tags ARE allowed, though\n" +
           "they're best placed at the end of your HTML -->\n");
         htmlField.clearSelection();
+        $(".html").one("click", function() {
+          htmlField.setValue("");
+        });
       }
       if (sessionStorage.getItem("css")) {
         cssField.setValue(sessionStorage.getItem("css"));
@@ -109,52 +113,52 @@
 
   // Toggle Text Areas from Displaying
   $(".togglePane").on("click", function() {
-    closeWindow(this);
+    panes.close(this);
   });
   $("#consoleToggle").on("click", function() {
-    $(this).toggleClass("btn-hidden");
+    $(this).toggleClass("btn-active");
     $(".console").toggle();
   });
   $("#previewToggle, #iframeClose").on("click", function() {
-    $("#previewToggle").toggleClass("btn-hidden");
-    $(".preview, html, body, section, #iframeLabel, #iframeClose").toggleClass("modal-open");
+    $("#previewToggle").toggleClass("btn-active");
+    $("html").toggleClass("modal-open");
   });
 
-  // Return the number of editor panes displayed
-  function numberOfWindows() {
-    var count = 3;
-    var items = $(".window");
-    items.each(function(el) {
-      if ($(items[el]).css("display") === "none") count -= 1;
-    });
-    return count;
-  }
-
-  // Resize panes based upon number currently toggled ON
-  function resizeWindow() {
-    var count = numberOfWindows();
-    var win = $(".window");
-    if (count === 3 || count === 0) {
-      win.css("width", "33%");
-    } else if (count === 2) {
-      win.css("width", "49.5%");
-    } else if (count === 1) {
-      win.css("width", "100%");
+  var panes = {
+    // Return the number of editor panes displayed
+    count: function() {
+      var count = 3;
+      var items = $(".windowGroup .column-33");
+      items.each(function(el) {
+        if ($(items[el]).css("display") === "none") count -= 1;
+      });
+      return count;
+    },
+    // Resize panes based upon number currently toggled ON
+    resize: function() {
+      var count = this.count();
+      var win = $(".windowGroup .column-33");
+      if (count === 3 || count === 0) {
+        win.css("width", "33%");
+      } else if (count === 2) {
+        win.css("width", "49.5%");
+      } else if (count === 1) {
+        win.css("width", "99%");
+      }
+    },
+    // On toggling an editor pane resize remaining and toggle button class
+    close: function(el) {
+      var name = el.dataset.editor;
+      var count = this.count();
+      if (count > 1 || $(el).hasClass("btn-active")) {
+        $(el).toggleClass("btn-active");
+        $(".window." + name).parent().toggle();
+        this.resize();
+      } else {
+        alert("You Must Have at least one Editor open");
+      }
     }
-  }
-
-  // On toggling an editor pane resize remaining and toggle button class
-  function closeWindow(el) {
-    var name = el.dataset.editor;
-    var count = numberOfWindows();
-    if (count > 1 || $(el).hasClass("btn-hidden")) {
-      $(el).toggleClass("btn-hidden");
-      $(".window." + name).toggle();
-      resizeWindow();
-    } else {
-      alert("You Must Have at least one Editor open");
-    }
-  }
+  };
 
   // Used by preview and download to compile editor panes and "Imports" into valid html
   function buildOutput(consoleJS) {
@@ -165,18 +169,35 @@
       js: jsField.getValue()
     };
 
+    // If using Autoprefixer, load it first via XMLHTTPRequest but do so only once.
+    if (use.Autoprefixer && typeof autoprefixer === "undefined") {
+      (function loadAutoprefixer() {
+        var xmlHttp = null;
+        xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", "http://rawgit.com/ai/autoprefixer-rails/master/vendor/autoprefixer.js", false);
+        xmlHttp.send(null);
+        var ap = document.createElement("script");
+        ap.type ="text/javascript";
+        ap.text = xmlHttp.responseText;
+        document.getElementsByTagName("head")[0].appendChild(ap);
+      })();
+    }
+
     // If using Sass, load it first via XMLHTTPRequest but do so only once.
     // We don't want to include it from the get-go as it's 2 Megabytes!!
-    if (use.Sass && !($("#sass").length)) {
-      var xmlHttp = null;
-      xmlHttp = new XMLHttpRequest();
-      xmlHttp.open("GET", "http://rawgithub.com/medialize/sass.js/master/dist/sass.min.js", false);
-      xmlHttp.send(null);
-      var sass = document.createElement("script");
-      sass.id = "sass";
-      sass.type = "text/javascript";
-      sass.text = xmlHttp.responseText;
-      document.getElementsByTagName("head")[0].appendChild(sass);
+    //if (use.Sass && !($("#sass").length)) {
+    if (use.Sass && typeof Sass === "undefined") {
+      (function loadSass() {
+        var xmlHttp = null;
+        xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", "http://rawgit.com/medialize/sass.js/master/dist/sass.min.js", false);
+        xmlHttp.send(null);
+        var sass = document.createElement("script");
+        sass.id = "sass";
+        sass.type = "text/javascript";
+        sass.text = xmlHttp.responseText;
+        document.getElementsByTagName("head")[0].appendChild(sass);
+      })();
     }
 
     // String to hold elements to build HTML output
@@ -237,15 +258,28 @@
     return html;
   }
 
-  // Publish output from HTML, CSS, and JS textareas in the iframe below
-  // after given keyup delay. If no delay provided, default to 500ms
+  // Toggle live edit/preview mode. It's sometimes slow or doesn't react well.
+  $("#liveEdit").on("click", function() {
+    use.liveEdit ? use.liveEdit = false:use.liveEdit = true;
+    $(this).toggleClass("btn-active");
+  });
 
+  // Publish output from HTML, CSS, and JS textareas in the iframe below
+  // after given keyup delay if "use.liveEdit: true".
+  htmlField.getSession().on("change", function(e) {
+    if (use.liveEdit) preview(500);
+  });
+  cssField.getSession().on("change", function(e) {
+    if (use.liveEdit) preview(2000);
+  });
+
+  // Update preview window AND js console on click of "Run" button
   $("#run").on("click", function() {
-    preview(0);
+    preview();
   });
 
   function preview(delay) {
-    delay = delay || 500;
+    delay = delay || 0;
     var timer = null;
     if (timer) {
       window.clearTimeout(timer);
@@ -283,11 +317,7 @@
 
   // Clear editors with "Clear" button
   $("#clear").on("click", function() {
-    htmlField.setValue("<!-- Do not place html/head/body tags here.\n" +
-      "Insert the tags as would normally be used in your\n" +
-      "body element. <script> tags ARE allowed, though\n" +
-      "they're best placed at the end of your HTML -->\n");
-    htmlField.clearSelection();
+    htmlField.setValue("");
     cssField.setValue("");
     jsField.setValue("");
     consoleField.setValue("");
@@ -296,9 +326,15 @@
     (document.getElementById("iframe").contentWindow.document).close();
   });
 
+  // right click on console to clear;
+  $(".console").on("contextmenu", function(el) {
+    el.preventDefault();
+    consoleField.setValue("");
+  });
+
   // ContextMenu
-  // This is going to get VERY unruly!
-  (function() {
+  // This is going to get VERY unruly BUT.. it minifies well.
+  (function contextMenu() {
     $.contextMenu({
       selector: ".windowGroup",
       "items": {
@@ -487,18 +523,17 @@
         show: function(opt) {
           // this is the trigger element
           var $this = this;
-          // import states from data store
-          $.contextMenu.setInputValues(opt, $this.data());
-          // this basically fills the input commands from an object
-          // like {name: "foo", yesno: true, radio: "3", …}
+          // import states from data store IF set. If we don't check this
+          // then default selected items get cleared on initial load
+          if ($.contextMenu.getInputValues(opt, $this.data())) {
+            $.contextMenu.setInputValues(opt, $this.data());
+          }
         },
         hide: function(opt) {
           // this is the trigger element
           var $this = this;
           // export states to data store
           $.contextMenu.getInputValues(opt, $this.data());
-          // this basically dumps the input commands' values to an object
-          // like {name: "foo", yesno: true, radio: "3", …}
         }
       }
     });
@@ -514,28 +549,28 @@
       switch (val) {
         // CSS Pre-Processor
         case "plaincss":
-          $('#cssLabel').text("CSS");
+          $("#cssLabel").text("CSS");
           cssField.getSession().setMode("ace/mode/css");
           use.Autoprefixer = false;
           use.Less = false;
           use.Sass = false;
           break;
         case "autoprefixer":
-          $('#cssLabel').text("CSS");
+          $("#cssLabel").text("CSS");
           cssField.getSession().setMode("ace/mode/css");
           use.Autoprefixer = true;
           use.Less = false;
           use.Sass = false;
           break;
         case "less":
-          $('#cssLabel').text("LESS");
+          $("#cssLabel").text("LESS");
           cssField.getSession().setMode("ace/mode/less");
           use.Less = true;
           use.Sass = false;
           use.Autoprefixer = false;
           break;
         case "sass":
-          $('#cssLabel').text("SASS");
+          $("#cssLabel").text("SASS");
           cssField.getSession().setMode("ace/mode/sass");
           use.Sass = true;
           use.Less = false;
@@ -545,6 +580,7 @@
         case "none":
           use.Bootstrap = false;
           use.Foundation = false;
+          break;
         case "bootstrap":
           use.Bootstrap = true;
           use.Foundation = false;
@@ -552,6 +588,7 @@
         case "foundation":
           use.Foundation = true;
           use.Bootstrap = false;
+          break;
       }
     } else {
       var checked = $(this).is(":checked");
@@ -577,20 +614,18 @@
     localStorage.setItem("theme", theme);
   }
 
-  // right click on console to clear;
-  $(".console").on("contextmenu", function(el) {
-    el.preventDefault();
-    consoleField.setValue("");
-  });
-
   // Detect a user leaving a page and display a message
   window.onbeforeunload = function (e) {
+    // Save current buffers into sessionStorage
+    sessionStorage.setItem("html", htmlField.getValue());
+    sessionStorage.setItem("css", cssField.getValue());
+    sessionStorage.setItem("js", jsField.getValue());
     // If we haven't been passed the event get the window.event
     e = e || window.event;
     var message = "Your current session will be lost..";
-    // For IE6-8 and Firefox prior to version 4
+    // // For IE6-8 and Firefox prior to version 4
     if (e) e.returnValue = message;
-    // For Chrome, Safari, IE8+ and Opera 12+
+    // // For Chrome, Safari, IE8+ and Opera 12+
     return message;
   };
 
