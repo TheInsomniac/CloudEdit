@@ -73,24 +73,23 @@ html, body, section {
 body {
   background: #eaeaea;
   font-family: "Clear Sans";
-  font-weight: 200;
-  font-size: 16px;
+  font-size: 100%;
   text-rendering: optimizeLegibility;
-/*  -webkit-font-smoothing: antialiased;*/
+  -webkit-font-smoothing: antialiased;
 /* -webkit-font-smoothing: subpixel-antialiased; */
 }
 
 h1 {
   text-align: center;
   color: #777;
-  font-size: 24px;
-  line-height: 29px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
 }
 
 section {
   background: #fff;
   width: 100%;
-  padding: 15px;
+  padding: 1rem;
   -webkit-box-shadow: rgba(0,0,0,.15) 0 15px 50px;
   box-shadow: rgba(0,0,0,.15) 0 15px 50px;
 }
@@ -104,7 +103,7 @@ section:after {
 }
 
 .btn {
-  padding: 5px;
+  padding: 0.3125rem;
   background: #eaeaea;
   color: #777;
   border: 1px solid #cdcdcd;
@@ -144,9 +143,9 @@ section:after {
 }
 
 .window {
-  margin-top: 0.5em;
+  margin-top: 0.5rem;
   width: 100%;
-  height: 300px;
+  height: 18.75rem;
   border: 1px solid #cdcdcd;
   -webkit-box-shadow: inset rgba(0,0,0,.05) 0 3px 10px;
   box-shadow: inset rgba(0,0,0,.05) 0 3px 10px;
@@ -173,9 +172,9 @@ pre {
   border: solid 1px #F1F1F1;
   background: #fff;
   display: inline-block;
-  height: 25px;
+  height: 1.5625rem;
   padding: 0 6px;
-  line-height: 22px;
+  line-height: 1.375rem;
   position: absolute;
   top: 2px;
   right: 2px;
@@ -241,7 +240,7 @@ pre {
   border-radius: 3px;
   -webkit-box-shadow: inset rgba(0,0,0,.05) 0 3px 10px;
   box-shadow: inset rgba(0,0,0,.05) 0 3px 10px;
-  height: 600px;
+  height: 37.5rem;
   top: 100%;
 /*  -webkit-transition-property: top;
     -moz-transition-property: top;
@@ -282,12 +281,12 @@ html.modal-open #iframeLabel {
   background: #333;
   color: #dadada;
   border: 1px solid #dadada;
-  border-radius: 25px;
+  border-radius: 1.5625rem;
   cursor: pointer;
   position: fixed;
-  width: 25px;
-  height: 25px;
-  line-height: 20px;
+  width: 1.5625rem;
+  height: 1.5625rem;
+  line-height: 1.25rem;
   top: 0;
   right: 2px;
   opacity: 0;
