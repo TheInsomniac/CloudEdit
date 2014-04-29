@@ -21,13 +21,14 @@ __Added:__
    - _autoprefixer.js_
    - _modernizr.js_
    - _normalize.css_
-   - _LESS.css_  
-   - _SASS.css_ : __Experimental. The minified js is 2 Megabytes!__  
-  - Frameworks:  
-    - _Bootstrap 3 CSS & JS_  
-    - _Foundation CSS & JS_  
+   - _LESS.css_
+   - _SASS.css_ : __Experimental. The minified js is 2 Megabytes!__
+  - Frameworks:
+    - _Bootstrap 3 CSS & JS_
+    - _Foundation CSS & JS_
 - Downloaded HTML file now includes CDN versions of selected JS/CSS Imports as
   well as autoprefixing all embedded CSS if _autoprefixer_ chosen as an import.
+- Appcache manifest for offline caching of resources and quicker future loading
 
 ![Image1](https://raw.githubusercontent.com/TheInsomniac/CloudEdit/master/img/CloudEdit1.png)
 

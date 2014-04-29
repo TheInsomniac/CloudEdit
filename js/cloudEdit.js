@@ -185,7 +185,6 @@
 
     // If using Sass, load it first via XMLHTTPRequest but do so only once.
     // We don't want to include it from the get-go as it's 2 Megabytes!!
-    //if (use.Sass && !($("#sass").length)) {
     if (use.Sass && typeof Sass === "undefined") {
       (function loadSass() {
         var xmlHttp = null;
@@ -613,6 +612,20 @@
     consoleField.setTheme(theme);
     localStorage.setItem("theme", theme);
   }
+
+  // Check if a new appcache is available on page load.
+  window.addEventListener('load', function(e) {
+    window.applicationCache.addEventListener('updateready', function(e) {
+      if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+        // Browser downloaded a new app cache.
+        if (confirm('A new version of this site is available. Load it?')) {
+          window.location.reload();
+        }
+      } else {
+        // Manifest didn't changed. Nothing new to server.
+      }
+    }, false);
+  }, false);
 
   // Detect a user leaving a page and display a message
   window.onbeforeunload = function (e) {
