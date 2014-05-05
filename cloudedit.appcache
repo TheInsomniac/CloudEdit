@@ -1,19 +1,22 @@
 CACHE MANIFEST
-#2014-04-28-11:36
+#2014-05-05-3:00
 
 CACHE:
 index.html
-css/cloudEdit.css
-css/contextMenu.css
+css/cloudEdit.min.css
+css/contextMenu.min.css
 css/fonts/ClearSans-Light-webfont.eot
 css/fonts/ClearSans-Light-webfont.svg
 css/fonts/ClearSans-Light-webfont.ttf
 css/fonts/ClearSans-Light-webfont.woff
 js/cloudEdit.min.js
 js/console.min.js
+js/jqconsole.min.js
 js/contextMenu.min.js
 js/jquery.ui.position.min.js
 js/ace/ace.js
+js/ace/emmet.js
+js/ace/ext-emmet.js
 js/ace/mode-css.js
 js/ace/mode-html_completions.js
 js/ace/mode-html.js

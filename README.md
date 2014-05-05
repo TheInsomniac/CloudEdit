@@ -9,11 +9,13 @@ CloudEdit
   - Concatenates html/css/js to their inline equivalents for single-file download.
 - Toggle-able editor panes resize automatically based upon how many are displayed.
 - Uses sessionStorage for the current state in case of the 'accidental' browser refresh.
-- Uses localStorage to store the currently selected them for your next use.
+- Uses localStorage to store the currently selected theme for your next use.
 
 __Added:__
-- Rudimentary "view-only" JavaScript console for _console.log_ statements.
-  - Unfortunately I have no way of catching "undefined" variables. They still go to the Browser.
+
+<del>- Rudimentary "view-only" JavaScript console for _console.log_ statements.
+  - Unfortunately I have no way of catching "undefined" variables. They still go to the Browser.</del>
+- jqConsole from [repl.it](https://github.com/replit/jq-console) for complete js console.
 - Preview Modal in case you don't like scrolling or want more of the end-user experience.
 - Context menu on "right-click" over any editor pane.
   - Theme Chooser for editor windows (changes all).
@@ -28,7 +30,9 @@ __Added:__
     - _Foundation CSS & JS_
 - Downloaded HTML file now includes CDN versions of selected JS/CSS Imports as
   well as autoprefixing all embedded CSS if _autoprefixer_ chosen as an import.
-- Appcache manifest for offline caching of resources and quicker future loading
+- Appcache manifest for offline caching of resources and quicker future loading.
+- Save current session to localStorage for persistence.
+- Load previous session from localStorage into current panes.
 
 ![Image1](https://raw.githubusercontent.com/TheInsomniac/CloudEdit/master/img/CloudEdit1.png)
 

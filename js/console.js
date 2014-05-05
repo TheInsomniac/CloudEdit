@@ -2,18 +2,16 @@
   if (!console) {
     console = {};
   }
-  var logger = window.parent.consoleField;
-  
+
+  var logger = window.parent.jqconsole;
+
   console.log = function(message) {
-    var currentMsgs, newMsg;
-    currentMsgs = logger.getValue() ? currentMsgs = logger.getValue() + '\n' : currentMsgs = '';
-    if (typeof message == 'object') {
-      newMsg = currentMsgs + (JSON && JSON.stringify ? JSON.stringify(message) : String(message));
-    } else if (typeof message == 'undefined') {
-      newMsg = currentMsgs + 'Uncaught ReferenceError: variable is not defined';
+    var data;
+    if (typeof message == "object") {
+      data = JSON && JSON.stringify ? JSON.stringify(message) : String(message);
     } else {
-      newMsg = currentMsgs + message;
+      data = message;
     }
-    logger.setValue(newMsg);
+    logger.Write("==> " + data + "\n");
   };
 })();

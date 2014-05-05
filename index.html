@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html manifest="cloudedit.appcache">
+<!--<html>-->
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
   <title>CloudEdit: HTML Live Editor</title>
-  <link href="css/cloudEdit.css" rel="stylesheet">
-  <link href="css/contextMenu.css" rel="stylesheet">
+  <link href="css/cloudEdit.min.css" rel="stylesheet">
+  <link href="css/contextMenu.min.css" rel="stylesheet">
 </head>
 
 <body>
   <section>
     <div class="row btnGroup">
       <div class="column-33 toggleGroup">
-        <button class="btn togglePane" id="htmlToggle" data-editor="html" title="Toggle HTML">Toggle HTML</button>
-        <button class="btn togglePane" id="cssToggle" data-editor="css" title="Toggle CSS">Toggle CSS</button>
-        <button class="btn togglePane" id="jsToggle" data-editor="js" title="Toggle JS">Toggle JS</button>
-        <button class="btn btn-active" id="consoleToggle" title="Toggle Console">Toggle Console</button>
+        <button class="btn togglePane" id="htmlToggle" data-editor="html" title="Toggle HTML">HTML</button>
+        <button class="btn togglePane" id="cssToggle" data-editor="css" title="Toggle CSS">CSS</button>
+        <button class="btn togglePane" id="jsToggle" data-editor="js" title="Toggle JS">JavaScript</button>
+        <button class="btn" id="consoleToggle" title="Toggle JavaScript Console">Console</button>
+        <button class="btn btn-active" id="liveEdit" title="Toggle Live Edit Mode">LiveEdit</button>
       </div><!--
       --><div class="column-33">
         <h1>CloudEdit: HTML Live Editor</h1>
       </div><!--
       --><div class="column-33 btnGroup last">
-        <button class="btn btn-active" id="liveEdit" title="Toggle Live Edit">Toggle LiveEdit</button>
         <button class="btn" id="previewToggle" title="Enlarge Preview">Preview</button>
-        <button class="btn" id="clear" title="Click to clear all">Clear</button>
-        <button class="btn" id="download" title="Download">Download</button>
-        <button class="btn" id="run" title="Run">Run</button>
+        <button class="btn" id="clear" title="Click to clear all panes">Clear</button>
+        <button class="btn" id="download" title="Download to computer">Download</button>
+        <button class="btn" id="save" title="Save to localStorage">Save</button>
+        <button class="btn" id="load" title="Load from localStorage">Load</button>
+        <button class="btn" id="run" title="Run...">Run</button>
       </div>
     </div>
     <div class="row windowGroup">
@@ -51,7 +54,7 @@
     </div>
     <div class="row console">
       <pre id="console"></pre>
-      <span class="windowLabel" id="consoleLabel">Console [right-click to clear]</span>
+      <span class="windowLabel" id="consoleLabel">Console</span>
     </div>
     <div class="row preview">
       <iframe id="iframe" name="CloudEdit"
@@ -63,10 +66,12 @@
     </div>
   </section>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-  <!--script src="js/autoprefixer.js" type="text/javascript" charset="utf-8"></script-->
   <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/ace/ext-emmet.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/ace/emmet.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jquery.ui.position.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/contextMenu.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/jqconsole.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/cloudEdit.min.js" type="text/javascript" charset="utf-8"></script>
 </body>
 

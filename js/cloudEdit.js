@@ -1,4 +1,4 @@
-/*global $:false, ace:false, htmlField:false, cssField:false, jsField:false, consoleField:false*/
+/*global $:false, ace:false, htmlField:false, cssField:false, jsField:false, jqconsole:false*/
 (function cloudEdit() {
   "use strict";
   // Globals
@@ -37,8 +37,10 @@
       mode: "ace/mode/html",
       tabSize: 2,
       useSoftTabs: true,
-      showPrintMargin: false
+      showPrintMargin: false,
+      enableEmmet: true
     });
+
 
     // CSS Editor
     window.cssField = ace.edit("css");
@@ -48,7 +50,8 @@
       mode: "ace/mode/css",
       tabSize: 2,
       useSoftTabs: true,
-      showPrintMargin: false
+      showPrintMargin: false,
+      enableEmmet: true
     });
 
     // JS Editor
@@ -59,27 +62,6 @@
       mode: "ace/mode/javascript",
       tabSize: 2,
       useSoftTabs: true,
-      showPrintMargin: false
-    });
-
-    // Console
-    window.consoleField = ace.edit("console");
-    // Hide input cursor
-    consoleField.renderer.$cursorLayer.element.style.opacity=0;
-    // Disable all pointer events
-    consoleField.container.style.pointerEvents="none";
-    // Clear highlight after appending output
-    consoleField.getSession().selection.on("changeSelection", function() {
-      consoleField.clearSelection();
-    });
-    consoleField.setOptions({
-      useWorker: false,
-      readOnly: true,
-      theme: aceTheme,
-      displayIndentGuides: true,
-      mode: "ace/mode/javascript",
-      highlightActiveLine: false,
-      highlightGutterLine: false,
       showPrintMargin: false
     });
 
@@ -94,7 +76,7 @@
           "body element. <script> tags ARE allowed, though\n" +
           "they're best placed at the end of your HTML -->\n");
         htmlField.clearSelection();
-        $(".html").one("click", function() {
+        $(".html").one("touchstart click", function() {
           htmlField.setValue("");
         });
       }
@@ -110,6 +92,75 @@
 
   })();
   // END ACE Editor
+
+  // init jqConsole
+  (function initConsole() {
+    var header = "Ctrl+C: abort command, Ctrl+A: start of Line, Ctrl+E: end of line.\n";
+
+    // Creating the console.
+    window.jqconsole = $("#console").jqconsole(header);
+    jqconsole.SetIndentWidth(2);
+
+    // Abort prompt on Ctrl+C.
+    jqconsole.RegisterShortcut("C", function() {
+      jqconsole.AbortPrompt();
+      handler();
+    });
+    // Move to line start Ctrl+A.
+    jqconsole.RegisterShortcut("A", function() {
+      jqconsole.MoveToStart();
+      handler();
+    });
+    // Move to line end Ctrl+E.
+    jqconsole.RegisterShortcut("E", function() {
+      jqconsole.MoveToEnd();
+      handler();
+    });
+    jqconsole.RegisterMatching("{", "}", "brace");
+    jqconsole.RegisterMatching("(", ")", "paran");
+    jqconsole.RegisterMatching("[", "]", "bracket");
+
+    // console.log implementation
+    window.log = function(message) {
+      var data = "";
+      if (typeof message == "object") {
+        data = JSON && JSON.stringify ? JSON.stringify(message) : String(message);
+      } else {
+        data = message;
+      }
+      jqconsole.Write("==> " + data + "\n");
+    };
+
+    // Handle a command.
+    var handler = function(command) {
+      if (command) {
+        if (command.search("console.log" !== -1)) {
+          command = command.replace("console.log", "log");
+        }
+        try {
+          jqconsole.Write("==> " + window.eval(command) + "\n");
+        } catch (e) {
+          jqconsole.Write("ReferenceError: " + e.message + "\n");
+        }
+      }
+      jqconsole.Prompt(true, handler, function(command) {
+        // Continue line if can't compile the command.
+        try {
+          new Function(command);
+        } catch (e) {
+          if (/[\[\{\(]$/.test(command)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
+        return false;
+      });
+    };
+    // Initiate the first prompt.
+    handler();
+  })();
+  // END jqconsole
 
   // Toggle Text Areas from Displaying
   $(".togglePane").on("click", function() {
@@ -246,7 +297,7 @@
     html += content.html;
     // true if previewing in the preview pane; false if called by download function.
     if (consoleJS) {
-      html += '<script src="js/console.min.js"></script>\n';
+      html += '\n<script src="js/console.min.js"></script>\n';
     }
     html += '\n<script>\n';
     html += content.js;
@@ -266,7 +317,7 @@
   // Publish output from HTML, CSS, and JS textareas in the iframe below
   // after given keyup delay if "use.liveEdit: true".
   htmlField.getSession().on("change", function(e) {
-    if (use.liveEdit) preview(500);
+    if (use.liveEdit) preview(1000);
   });
   cssField.getSession().on("change", function(e) {
     if (use.liveEdit) preview(2000);
@@ -286,10 +337,12 @@
     timer = window.setTimeout(function() {
       timer = null;
       // pass true as we want the pseudo console.js script
+      //console.time('buildOutput'); // start timer for debugging
       var textToWrite = buildOutput(true);
 
       (document.getElementById("iframe").contentWindow.document).write(textToWrite);
       (document.getElementById("iframe").contentWindow.document).close();
+      //console.timeEnd('buildOutput'); // end timer for debugging
     }, delay);
   }
 
@@ -319,16 +372,35 @@
     htmlField.setValue("");
     cssField.setValue("");
     jsField.setValue("");
-    consoleField.setValue("");
     sessionStorage.clear();
     (document.getElementById("iframe").contentWindow.document).write("");
     (document.getElementById("iframe").contentWindow.document).close();
   });
 
-  // right click on console to clear;
-  $(".console").on("contextmenu", function(el) {
-    el.preventDefault();
-    consoleField.setValue("");
+  // Save current editor panes to localStorage
+  $("#save").on("click", function() {
+    var store = {
+      html: htmlField.getValue(),
+      css: cssField.getValue(),
+      js: jsField.getValue()
+    };
+    localStorage.setItem("cloudEdit", JSON.stringify(store));
+  });
+
+  // Load into editors from localStorage if exists
+  $("#load").on("click", function() {
+    var store;
+    if (localStorage.cloudEdit) {
+      store = JSON.parse(localStorage.cloudEdit);
+      cssField.setValue(store.css);
+      cssField.clearSelection();
+      htmlField.setValue(store.html);
+      htmlField.clearSelection();
+      jsField.setValue(store.js);
+      jsField.clearSelection();
+    } else {
+      alert("No previous session found...");
+    }
   });
 
   // ContextMenu
@@ -609,16 +681,19 @@
     htmlField.setTheme(theme);
     cssField.setTheme(theme);
     jsField.setTheme(theme);
-    consoleField.setTheme(theme);
+    // Uncomment if you want the page/body background to follow the set theme colour.
+//    setTimeout(function() {
+//      $("body, section").css("background-color", $("#html").css("background-color"));
+//    }, 1000);
     localStorage.setItem("theme", theme);
   }
 
   // Check if a new appcache is available on page load.
-  window.addEventListener('load', function(e) {
-    window.applicationCache.addEventListener('updateready', function(e) {
+  window.addEventListener("load", function(e) {
+    window.applicationCache.addEventListener("updateready", function(e) {
       if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
         // Browser downloaded a new app cache.
-        if (confirm('A new version of this site is available. Load it?')) {
+        if (confirm("A new version of this site is available. Load it?")) {
           window.location.reload();
         }
       } else {
