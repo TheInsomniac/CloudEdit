@@ -88,6 +88,12 @@
         jsField.setValue(sessionStorage.getItem("js"));
         jsField.clearSelection();
       }
+      if (sessionStorage.getItem("use")) {
+        use = JSON.parse(sessionStorage.getItem("use"));
+      }
+      if (sessionStorage.getItem("cssMode")) {
+        cssField.getSession().setMode(sessionStorage.getItem("cssMode"));
+      }
     })();
 
   })();
@@ -704,10 +710,17 @@
 
   // Detect a user leaving a page and display a message
   window.onbeforeunload = function (e) {
+
     // Save current buffers into sessionStorage
     sessionStorage.setItem("html", htmlField.getValue());
     sessionStorage.setItem("css", cssField.getValue());
     sessionStorage.setItem("js", jsField.getValue());
+
+    // save selected imports into sessionStorage
+    sessionStorage.setItem("use", JSON.stringify(use));
+    // and if using LESS/Sass make sure the editor mode is saved as well
+    sessionStorage.setItem("cssMode", cssField.getSession().getMode().$id);
+
     // If we haven't been passed the event get the window.event
     e = e || window.event;
     var message = "Your current session will be lost..";
