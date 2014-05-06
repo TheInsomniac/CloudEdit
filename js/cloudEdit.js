@@ -18,6 +18,20 @@
   // ---
   // End Globals
 
+   // Check if a new appcache is available on page load. If so, ask to load it.
+  window.addEventListener("load", function(e) {
+    window.applicationCache.addEventListener("updateready", function(e) {
+      if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+        // Browser downloaded a new app cache.
+        if (confirm("A new version of this site is available. Load it?")) {
+          window.location.reload();
+        }
+      } else {
+        // Manifest didn't changed. Do NOTHING!
+      }
+    }, false);
+  }, false);
+
   // Create Text Area panes
   // Init ACE Editor and set options;
   (function initAce() {
@@ -258,6 +272,7 @@
 
     // String to hold elements to build HTML output
     var html = '';
+    html += '<!DOCTYPE html>\n';
     html += '<html lang="en">\n';
     html += '<head>\n';
     html += '<meta charset="UTF-8">\n';
@@ -356,7 +371,12 @@
   // Source: http://thiscouldbebetter.wordpress.com/2012/12/18/loading-editing-and-saving-a-text-file-in-html5-using-javascrip/
   $("#download").on("click", function() {
 
-    var $download = $("#download")[0];
+    function destroyClickedElement(event) {
+      document.body.removeChild(event.target);
+    }
+
+    var $download = document.createElement("a");
+
     // pass false as we don't want the pseudo console.js script
     var textToWrite = buildOutput(false);
     var textFileAsBlob = new Blob([textToWrite], {type: "text/plain"});
@@ -371,6 +391,10 @@
       // Firefox
       $download.href = window.URL.createObjectURL(textFileAsBlob);
     }
+    $download.onclick = destroyClickedElement;
+		$download.style.display = "none";
+		document.body.appendChild($download);
+    $download.click();
   });
 
   // Clear editors with "Clear" button
@@ -687,26 +711,15 @@
     htmlField.setTheme(theme);
     cssField.setTheme(theme);
     jsField.setTheme(theme);
-    // Uncomment if you want the page/body background to follow the set theme colour.
-//    setTimeout(function() {
-//      $("body, section").css("background-color", $("#html").css("background-color"));
-//    }, 1000);
+    // Uncomment below if you want the page/body background to follow the set theme colour.
+    // we delay obtaining the css colour by 1s as it takes a moment to propagate
+    /*
+    setTimeout(function() {
+      $("body, section").css("background-color", $("#html").css("background-color"));
+    }, 1000);
+    */
     localStorage.setItem("theme", theme);
   }
-
-  // Check if a new appcache is available on page load.
-  window.addEventListener("load", function(e) {
-    window.applicationCache.addEventListener("updateready", function(e) {
-      if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-        // Browser downloaded a new app cache.
-        if (confirm("A new version of this site is available. Load it?")) {
-          window.location.reload();
-        }
-      } else {
-        // Manifest didn't changed. Nothing new to server.
-      }
-    }, false);
-  }, false);
 
   // Detect a user leaving a page and display a message
   window.onbeforeunload = function (e) {
@@ -723,11 +736,10 @@
 
     // If we haven't been passed the event get the window.event
     e = e || window.event;
-    var message = "Your current session will be lost..";
+    var message = "Your current session may be lost..";
     // // For IE6-8 and Firefox prior to version 4
     if (e) e.returnValue = message;
     // // For Chrome, Safari, IE8+ and Opera 12+
     return message;
   };
-
 })();

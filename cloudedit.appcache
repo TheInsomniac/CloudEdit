@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#2014-05-05-3:00
+#2014-05-05-18:22
 
 CACHE:
 index.html
@@ -59,16 +59,16 @@ js/ace/theme-tomorrow_night.js
 js/ace/theme-twilight.js
 js/ace/theme-vibrant_ink.js
 js/ace/theme-xcode.js
-https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
+http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
 http://rawgit.com/ai/autoprefixer-rails/master/vendor/autoprefixer.js
 http://rawgit.com/medialize/sass.js/master/dist/sass.min.js
-https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css
-https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css
-https://cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/css/foundation.min.css
-https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js
-https://cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation/foundation.min.js
-https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js
-https://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js
+http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css
+http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css
+http://cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/css/foundation.min.css
+http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js
+http://cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/js/foundation/foundation.min.js
+http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js
+http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js
 
 # Resources that require the user to be online.
 NETWORK:
