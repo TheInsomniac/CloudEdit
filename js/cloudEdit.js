@@ -520,6 +520,18 @@
                     updateTheme("chrome");
                   }
                 },
+                "clouds": {
+                  "name": "Clouds",
+                  "callback": function() {
+                    updateTheme("clouds");
+                  }
+                },
+                "crimsoneditor": {
+                  "name": "Crimson Editor",
+                  "callback": function() {
+                    updateTheme("crimson_editor");
+                  }
+                },
                 "dreamweaver": {
                   "name": "Dreamweaver",
                   "callback": function() {
@@ -532,16 +544,16 @@
                     updateTheme("dawn");
                   }
                 },
-                "tomorrow": {
-                  "name": "Tomorow",
+                "eclipse": {
+                  "name": "Eclipse",
                   "callback": function() {
-                    updateTheme("tomorrow");
+                    updateTheme("eclipse");
                   }
                 },
-                "xcode": {
-                  "name": "XCode",
+                "github": {
+                  "name": "Github",
                   "callback": function() {
-                    updateTheme("xcode");
+                    updateTheme("github");
                   }
                 },
                 "kuroir": {
@@ -555,6 +567,30 @@
                   "callback": function() {
                     updateTheme("katzenmilch");
                   }
+                },
+                "solarizedlight": {
+                  "name": "Solarized Light",
+                  "callback": function() {
+                    updateTheme("solarized_light");
+                  }
+                },
+                "textmate": {
+                  "name": "TextMate",
+                  "callback": function() {
+                    updateTheme("textmate");
+                  }
+                },
+                "tomorrow": {
+                  "name": "Tomorow",
+                  "callback": function() {
+                    updateTheme("tomorrow");
+                  }
+                },
+                "xcode": {
+                  "name": "XCode",
+                  "callback": function() {
+                    updateTheme("xcode");
+                  }
                 }
               }
             },
@@ -567,16 +603,34 @@
                     updateTheme("ambiance");
                   }
                 },
+                "chaos": {
+                  "name": "Chaos",
+                  "callback": function() {
+                    updateTheme("chaos");
+                  }
+                },
                 "cloudsmidnight": {
                   "name": "Clouds Midight",
                   "callback": function() {
                     updateTheme("clouds_midnight");
                   }
                 },
+                "cobalt": {
+                  "name": "Cobalt",
+                  "callback": function() {
+                    updateTheme("cobalt");
+                  }
+                },
                 "idlefingers": {
                   "name": "Idle Fingers",
                   "callback": function() {
                     updateTheme("idle_fingers");
+                  }
+                },
+                "krtheme": {
+                  "name": "KR Theme",
+                  "callback": function() {
+                    updateTheme("kr_theme");
                   }
                 },
                 "merbivore": {
@@ -591,10 +645,34 @@
                     updateTheme("merbivore_soft");
                   }
                 },
+                "monoindustrial": {
+                  "name": "Mono Industrial",
+                  "callback": function() {
+                    updateTheme("mono_industrial");
+                  }
+                },
                 "monokai": {
                   "name": "Monokai",
                   "callback": function() {
                     updateTheme("monokai");
+                  }
+                },
+                "pastelondark": {
+                  "name": "Pastel on Dark",
+                  "callback": function() {
+                    updateTheme("pastel_on_dark");
+                  }
+                },
+                "solarizeddark": {
+                  "name": "Solarized Dark",
+                  "callback": function() {
+                    updateTheme("solarized_dark");
+                  }
+                },
+                "terminal": {
+                  "name": "Terminal",
+                  "callback": function() {
+                    updateTheme("terminal");
                   }
                 },
                 "tomorrownight": {
@@ -603,10 +681,34 @@
                     updateTheme("tomorrow_night");
                   }
                 },
+                "tomorrownightblue": {
+                  "name": "Tomorrow Night Blue",
+                  "callback": function() {
+                    updateTheme("tomorrow_night_blue");
+                  }
+                },
+                "tomorrownightbright": {
+                  "name": "Tomorrow Night Bright",
+                  "callback": function() {
+                    updateTheme("tomorrow_night_bright");
+                  }
+                },
+                "tomorrownighteighties": {
+                  "name": "Tomorrow Night Eighties",
+                  "callback": function() {
+                    updateTheme("tomorrow_night_eighties");
+                  }
+                },
                 "twilight": {
                   "name": "Twilight",
                   "callback": function() {
                     updateTheme("twilight");
+                  }
+                },
+                "vibrantink": {
+                  "name": "Vibrant Ink",
+                  "callback": function() {
+                    updateTheme("vibrant_ink");
                   }
                 }
               }
