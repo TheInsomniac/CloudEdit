@@ -3,33 +3,85 @@
 <!--<html>-->
 
 <head>
+<!--
+ _                          
+| |                _        
+| |__    _   _    (_)       
+| '_ \  | | | |             
+| |_) | | |_| |    _        
+|_.__/   \__, |   (_)       
+          __/ |             
+         |___/              
+                                                                                                        
+                                                                                                        
+                                                                                                        
+  _____    _                     _   _                  _                         _   _                 
+ |  __ \  (_)                   | \ | |                | |                       | | (_)                
+ | |__) |  _    __ _   _ __     |  \| |  _   _   _ __  | |__     ___   _ __    __| |  _    __ _   _ __  
+ |  _  /  | |  / _` | | '_ \    | . ` | | | | | | '__| | '_ \   / _ \ | '__|  / _` | | |  / _` | | '_ \ 
+ | | \ \  | | | (_| | | | | |   | |\  | | |_| | | |    | | | | |  __/ | |    | (_| | | | | (_| | | | | |
+ |_|  \_\ |_|  \__,_| |_| |_|   |_| \_|  \__,_| |_|    |_| |_|  \___| |_|     \__,_| |_|  \__,_| |_| |_|
+                                                                                                        
+                Copyright 2016 - http://www.kangrian.com     
+-->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
-  <title>CloudEdit: HTML Live Editor</title>
-  <link href="css/cloudEdit.min.css" rel="stylesheet">
-  <link href="css/contextMenu.min.css" rel="stylesheet">
+  <link rel="icon" type="image/ico" href="http://blog.kangrian.com/favicon.ico">
+
+  <!-- SEO TAG -->
+  <title>HTML Live Editor - KangRian&#174;</title>
+  <meta content='HTML Live Editor, HTML Editor, Live Editor, HTML Online Editor, Editor HTML Online, CSS Editor, JavaScript Editor' name='keywords'/>
+  <meta content='Cari HTML Editor yang LIVE PREVIEW, buat Belajar HTML / CSS / JavaScript? Coba sekarang di http://kangrian.com/editor/ (HTML Live Editor 2016).' name='description'/>
+  <meta content='http://kangrian.com/editor/' property='og:url'/>
+  <meta content='169828266520120' property='fb:app_id'/>
+  <meta content='100000504063337' property='fb:admins'/>
+  <meta content='100000504063337' property='fb:profile_id'/>
+  <meta content='id_ID' property='og:locale'/>
+  <meta content='KANGRIAN.COM' name='author'/>
+  <meta content='https://www.facebook.com/KangRianDotCom' property='article:author'/>
+  <link href='https://plus.google.com/107916942211462832232' rel='author'/>
+  <link href='https://plus.google.com/107916942211462832232' rel='publisher'/>
+  <link href='https://plus.google.com/107916942211462832232' rel='me'/>
+  <link href='https://lh3.googleusercontent.com/-6WUQw0VpGhw/VpsyZlgLpTI/AAAAAAAABec/F3jFhgm0ixU/s0/HTMLLiveEditor.png' rel='image_src'/>
+
+  <meta content='github' name='generator'/>
+  <link href='http://kangrian.com/editor' rel='canonical'/>
+  <meta content='general' name='rating'/>
+  <meta content='all' name='robots'/>
+  <meta content='index, follow' name='robots'/>
+  <meta content='id' name='geo.country'/>
+  <meta content='Indonesia' name='geo.placename'/>
+  <meta content='1 days' name='revisit-after'/>
+  <!-- #SEO TAG -->
+
+  <link rel="stylesheet" href="css/font-awesome.min.css"/>
+  <link href="css/cloudEdit.min.css" rel="stylesheet"/>
+  <link href="css/contextMenu.min.css" rel="stylesheet"/>
 </head>
 
 <body>
+<div id='loading'></div>
   <section>
     <div class="row btnGroup">
-      <div class="column-33 toggleGroup">
-        <button class="btn togglePane" id="htmlToggle" data-editor="html" title="Toggle HTML">HTML</button>
-        <button class="btn togglePane" id="cssToggle" data-editor="css" title="Toggle CSS">CSS</button>
-        <button class="btn togglePane" id="jsToggle" data-editor="js" title="Toggle JS">JavaScript</button>
-        <button class="btn" id="consoleToggle" title="Toggle JavaScript Console">Console</button>
-        <button class="btn btn-active" id="liveEdit" title="Toggle Live Edit Mode">LiveEdit</button>
+      <div class="column-33 toggleGroup" style='margin-top:15px;'>
+        <button class="btn togglePane tombol bulat tooltip" id="htmlToggle" data-editor="html" title="Toggle HTML">HTML <i class='fa fa-toggle-on'></i></button>
+        <button class="btn togglePane tombol bulat tooltip" id="cssToggle" data-editor="css" title="Toggle CSS">CSS <i class='fa fa-toggle-on'></i></button>
+        <button class="btn togglePane tombol bulat tooltip" id="jsToggle" data-editor="js" title="Toggle JS">JavaScript <i class='fa fa-toggle-on'></i></button>
+        <button class="btn bulat tooltip" id="consoleToggle" title="Toggle JavaScript Console" style="display:none;">Console <i class='fa fa-toggle-on'></i></button>
+        <Br/>
       </div><!--
       --><div class="column-33">
-        <h1>CloudEdit: HTML Live Editor</h1>
+        <h1 style="font-weight:900!important;color:#2d2d2d;margin-top:5px;"><img src='http://blog.kangrian.com/favicon.ico' alt='favicon' style="opacity:.9" /> KangRian&#174; - HTML Live Editor</h1>
+        <center style="margin-top:5px;display:block;font-size:16px; color:#6d6d6d;">http://kangrian.com/editor</center>
       </div><!--
       --><div class="column-33 btnGroup last">
-        <button class="btn" id="previewToggle" title="Enlarge Preview">Preview</button>
-        <button class="btn" id="clear" title="Click to clear all panes">Clear</button>
-        <button class="btn" id="download" title="Download to computer">Download</button>
-        <button class="btn" id="save" title="Save to localStorage">Save</button>
-        <button class="btn" id="load" title="Load from localStorage">Load</button>
-        <button class="btn" id="run" title="Run...">Run</button>
+        <button class="btn tombol kecil bulat tooltip" id="previewToggle" title="Enlarge Preview">Preview</button>
+        <button class="btn tombol kecil bulat tooltip" id="clear" title="Click to clear all panes">Clear</button> <span style='opacity:.3;'>/</span>
+        <button class="btn tombol kecil bulat tooltip" id="download" title="Download to computer">Download</button> <span style='opacity:.3;'>/</span>
+        <button class="btn tombol kecil bulat tooltip" id="save" title="Save to localStorage">Save</button>
+        <button class="btn tombol kecil bulat tooltip" id="load" title="Load from localStorage">Load</button><br/>
+        <button class="btn tombol bulat tooltip" id="run" title="Run..." style='padding-left:50px;padding-right:50px;'>Run</button>
+        <button class="btn tombol bulat btn-active tooltip" id="liveEdit" title="Toggle Live Edit Mode" style='padding-left:50px;padding-right:50px;'>LiveEdit <i class='fa fa-toggle-off'></i></button>
       </div>
     </div>
     <div class="row windowGroup">
@@ -52,20 +104,44 @@
         </div>
       </div>
     </div>
-    <div class="row console">
+    <div class="row console" style="display:none;">
       <pre id="console"></pre>
       <span class="windowLabel" id="consoleLabel">Console</span>
     </div>
-    <div class="row preview">
-      <iframe id="iframe" name="CloudEdit"
-        sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-forms"
-        allowtransparency="true">
-      </iframe>
-      <span class="windowLabel" id="iframeLabel">Preview</span>
-      <span id="iframeClose">x</span>
+    <div class='minheight'>
+    <div class='responsiveBtn'>
+    <h2 style="display:inline-block;"><i class='fa fa-laptop' style='vertical-align:middle;font-size:30px;'></i> Responsive Web-Design? </h2>
+      <button id='b1280' class='tombol bulat'>1280</button>
+      <button id='b1024' class='tombol bulat'>1024</button>
+      <button id='b960' class='tombol bulat'>960</button>
+      <button id='b800' class='tombol bulat'>800</button>
+      <button id='b768' class='tombol bulat'>768</button>
+      <button id='b720' class='tombol bulat'>720</button>
+      <button id='b640' class='tombol bulat'>640</button>
+      <button id='b480' class='tombol bulat'>480</button>
+      <button id='b360' class='tombol bulat'>360</button>
+      <button id='b320' class='tombol bulat'>320</button>
     </div>
+      <div class="row preview" id="resize" style='background:#fff;'>
+        <iframe id="iframe" name="CloudEdit"
+          sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-forms"
+          allowtransparency="true">
+        </iframe>
+        <span class="windowLabel" id="iframeLabel">Preview</span>
+        <span id="iframeClose">&#215;</span>
+      </div>
+    </div>
+    <footer style='font-size:70%;margin:20px 20px 0;'>&#169;2014 - 2015 <b>KangRian&#174; Live Editor</b> | Created by : <a href='https://github.com/TheInsomniac' target='_blank' style='color:#1d1d1d;font-weight:bold;text-decoration:none;' class="tooltip" title='https://github.com/TheInsomniac'>TheInsomniac</a> | Developed by : <a style='color:#1d1d1d;font-weight:bold;text-decoration:none;' title='http://kangrian.com' class='clickProfile tooltip' href='#' >Kang Rian</a>
+
+    <span class='share'>Share this! on <a class='facebook' href='https://www.facebook.com/sharer/sharer.php?u=http://kangrian.com/editor' target='_blank'><i class='fa fa-facebook-official'></i></a> <a class='twitter' href='https://twitter.com/intent/tweet?text=HTML Live Editor - KangRian!&amp;url=http://kangrian.com/editor' target='_blank'><i class='fa fa-twitter'></i></a> <a class='gplus' href='https://plus.google.com/share?url=http://kangrian.com/editor' target='_blank'><i class='fa fa-google-plus'></i></a></span></footer>
+
   </section>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <div id='notif' style='display:none;'>
+  <h1><i class='fa fa-user-secret'></i><br/>SORRY!</h1>
+  <p>This Editor, only available on 960px screen width or more..</p>
+  <p><i class='fa fa-code'></i>
+  </div>
+  <script src="js/jquery.min.js"></script>
   <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/ace/ext-emmet.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/ace/emmet.js" type="text/javascript" charset="utf-8"></script>
@@ -73,6 +149,29 @@
   <script src="js/contextMenu.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jqconsole.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/cloudEdit.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/kangrian.min.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<style type="text/css">
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700); .overlayProfile { position:fixed; z-index:-1; top:0; left:0; background:#3B4452; width:50%; height:100%; opacity:.9; } .overlayProfile2 { position:fixed; z-index:-1; top:0; right:0; background:#2F3846; width:50%; height:100%; opacity:.9; } .closeProfile { border-radius:0 0 4px 4px; display:inline-block; font-size:400%; position:absolute; top:0px; left:50%; margin-left:-25px; width:50px; text-align:center; cursor:pointer; background:rgba(255,255,255,.90); color:#2d2d2d; box-shadow:0 5px 0 rgba(0,0,0,0.20); } .profilePopup { font-family: 'Montserrat', sans-serif!important; text-align:center; display:none; position:absolute; z-index:+1000; top:0px; padding-top:20%; left:50%; width:500px; margin-left:-250px; color:rgba(255,255,255,.90); padding-bottom:100px; } .profilePopup h4 { font-weight:700; font-size:300%; letter-spacing:-2px; margin:0; text-shadow:0 4px 0 rgba(0,0,0,0.20); } .profilePopup p { font-weight:400; font-size:90%; letter-spacing:.5px; margin:0; padding:0; margin-top:5px; text-shadow:0 -2px 0 rgba(0,0,0,0.20); } .profilePopup a { display:block; background:rgba(0,0,0,0.20); padding:10px 20px; margin-top:20px; color:#fff; text-decoration:none!important; font-size:80%; letter-spacing:3px; } .profilePopup img { border-radius:50%; box-shadow:0 0 0 10px rgba(0,0,0,0.20); margin-bottom:20px; width:100%; max-width:200px; } @media (max-width:510px) { .profilePopup { width:250px; padding-top:35%; margin-left:-125px; } .profilePopup h4 { font-size:250%; } .profilePopup p { font-size:80%; } }
+</style>
+<script>
+$(document).ready(function(){ 
+  $('.profilePopup').prepend('<div class="overlayProfile"></div>');
+  $('.profilePopup').prepend('<div class="overlayProfile2"></div>');
+  $('.profilePopup').prepend('<span class="closeProfile">&#215;</span>');
+});
+$(document).ready(function(){ 
+  $('.clickProfile, .closeProfile, .overlayProfile, .overlayProfile2').click(function(){
+    $('.profilePopup').fadeToggle('50');
+  });
+});
+</script>
+<div class="profilePopup" id='profilePopup'>
+  <img src='kr.png'/>
+<h4>KangRian.com</h4>
+<p>Front-End Web Designer, Based in Bandung - Indonesia.</p>
+<a href='http://www.kangrian.com' target='_blank'>http://studio.kangrian.com</a>
+</div>
 </body>
 
 </html>

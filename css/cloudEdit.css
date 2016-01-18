@@ -140,7 +140,6 @@ section:after {
   background: #E9CACA;
   color: #444;
 }
-
 #htmlToggle:after {
   content: " \2630";
   position: relative;
