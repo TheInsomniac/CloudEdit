@@ -55,8 +55,8 @@
   <!-- #SEO TAG -->
 
   <link rel="stylesheet" href="css/font-awesome.min.css"/>
-  <link href="css/cloudEdit.min.css" rel="stylesheet">
-  <link href="css/contextMenu.min.css" rel="stylesheet">
+  <link href="css/cloudEdit.min.css" rel="stylesheet"/>
+  <link href="css/contextMenu.min.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -131,7 +131,7 @@
         <span id="iframeClose">&#215;</span>
       </div>
     </div>
-    <footer style='font-size:70%;margin:20px 20px 0;'>&#169;2014 - 2015 <b>KangRian&#174; Live Editor</b> | Created by : <a href='https://github.com/TheInsomniac' target='_blank' style='color:#1d1d1d;font-weight:bold;text-decoration:none;' class="tooltip" title='https://github.com/TheInsomniac'>TheInsomniac</a> | Developed by : <a href='http://kangrian.com/' target='_blank' style='color:#1d1d1d;font-weight:bold;text-decoration:none;' class="tooltip" title='http://kangrian.com'>Kang Rian</a>
+    <footer style='font-size:70%;margin:20px 20px 0;'>&#169;2014 - 2015 <b>KangRian&#174; Live Editor</b> | Created by : <a href='https://github.com/TheInsomniac' target='_blank' style='color:#1d1d1d;font-weight:bold;text-decoration:none;' class="tooltip" title='https://github.com/TheInsomniac'>TheInsomniac</a> | Developed by : <a style='color:#1d1d1d;font-weight:bold;text-decoration:none;' title='http://kangrian.com' class='clickProfile tooltip' href='#' >Kang Rian</a>
 
     <span class='share'>Share this! on <a class='facebook' href='https://www.facebook.com/sharer/sharer.php?u=http://kangrian.com/editor' target='_blank'><i class='fa fa-facebook-official'></i></a> <a class='twitter' href='https://twitter.com/intent/tweet?text=HTML Live Editor - KangRian!&amp;url=http://kangrian.com/editor' target='_blank'><i class='fa fa-twitter'></i></a> <a class='gplus' href='https://plus.google.com/share?url=http://kangrian.com/editor' target='_blank'><i class='fa fa-google-plus'></i></a></span></footer>
 
@@ -150,6 +150,28 @@
   <script src="js/jqconsole.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/cloudEdit.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/kangrian.min.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<style type="text/css">
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700); .overlayProfile { position:fixed; z-index:-1; top:0; left:0; background:#3B4452; width:50%; height:100%; opacity:.9; } .overlayProfile2 { position:fixed; z-index:-1; top:0; right:0; background:#2F3846; width:50%; height:100%; opacity:.9; } .closeProfile { border-radius:0 0 4px 4px; display:inline-block; font-size:400%; position:absolute; top:0px; left:50%; margin-left:-25px; width:50px; text-align:center; cursor:pointer; background:rgba(255,255,255,.90); color:#2d2d2d; box-shadow:0 5px 0 rgba(0,0,0,0.20); } .profilePopup { font-family: 'Montserrat', sans-serif!important; text-align:center; display:none; position:absolute; z-index:+1000; top:0px; padding-top:20%; left:50%; width:500px; margin-left:-250px; color:rgba(255,255,255,.90); padding-bottom:100px; } .profilePopup h4 { font-weight:700; font-size:300%; letter-spacing:-2px; margin:0; text-shadow:0 4px 0 rgba(0,0,0,0.20); } .profilePopup p { font-weight:400; font-size:90%; letter-spacing:.5px; margin:0; padding:0; margin-top:5px; text-shadow:0 -2px 0 rgba(0,0,0,0.20); } .profilePopup a { display:block; background:rgba(0,0,0,0.20); padding:10px 20px; margin-top:20px; color:#fff; text-decoration:none!important; font-size:80%; letter-spacing:3px; } .profilePopup img { border-radius:50%; box-shadow:0 0 0 10px rgba(0,0,0,0.20); margin-bottom:20px; width:100%; max-width:200px; } @media (max-width:510px) { .profilePopup { width:250px; padding-top:35%; margin-left:-125px; } .profilePopup h4 { font-size:250%; } .profilePopup p { font-size:80%; } }
+</style>
+<script>
+$(document).ready(function(){ 
+  $('.profilePopup').prepend('<div class="overlayProfile"></div>');
+  $('.profilePopup').prepend('<div class="overlayProfile2"></div>');
+  $('.profilePopup').prepend('<span class="closeProfile">&#215;</span>');
+});
+$(document).ready(function(){ 
+  $('.clickProfile, .closeProfile, .overlayProfile, .overlayProfile2').click(function(){
+    $('.profilePopup').fadeToggle('50');
+  });
+});
+</script>
+<div class="profilePopup" id='profilePopup'>
+  <img src='kr.png'/>
+<h4>KangRian.com</h4>
+<p>Front-End Web Designer, Based in Bandung - Indonesia.</p>
+<a href='http://www.kangrian.com' target='_blank'>http://studio.kangrian.com</a>
+</div>
 </body>
 
 </html>
